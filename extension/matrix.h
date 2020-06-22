@@ -65,6 +65,9 @@ matrix2d_t *matrixAveragePooling(matrix2d_t *matrix, matrix2d_t *gradient, int s
 
 bool areMatrixesEqual(matrix2d_t *matrix1, matrix2d_t *matrix2, double tolerance);
 
+matrix2d_t *matrixFlatten(matrix3d_t *matrix);
+matrix3d_t *matrixUnflatten(matrix2d_t *matrix, double* dimensions);
+
 void matrixPrint(matrix2d_t *matrix);
 
 void matrixFree(matrix2d_t *matrix);

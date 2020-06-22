@@ -86,9 +86,9 @@ void testActiveFuncs() {
     assertEqual(sigmoid(0), 0.5);
     assertOther(sigmoid(-123) < 0.000001);
 
-    assertOther(sigmoidPrime(32.128) - 0 < 0.000001);
-    assertEqual(sigmoidPrime(0), 0.25);
-    assertEqual(sigmoidPrime(-12313), 0);
+    assertOther(sigmoidPrime(sigmoid(32.128)) - 0 < 0.000001);
+    assertEqual(sigmoidPrime(sigmoid(0)), 0.25);
+    assertEqual(sigmoidPrime(sigmoid(-12313)), 0);
 
     assertEqual(tanhActive(0), 0);
     assertEqual(tanhActive(123), 1);
@@ -448,26 +448,26 @@ void testOptimisers() {
     printf("Testing Optimiser Functions\n");
 
     double lRate = 0.7;
-    double momentum = 0.9;
-    double delta = 0.65;
-    double decayRate = 0.1;
+    // double momentum = 0.9;
+    // double delta = 0.65;
+    // double decayRate = 0.1;
     //Tets sgd
     node_t *test1 = nodeInit("test1", 0, 2, true);
     test1->content.data->data->matrix2d = matrixCreate(100, 235);
-    matrixRandomise(&test1->content.data->data->matrix2d);
+    matrixRandomise(test1->content.data->data->matrix2d);
 
-    test1->matrix = matrixCreate(100, 235);
-    matrixRandomise(test1->matrix);
+    test1->matrix->matrix2d = matrixCreate(100, 235);
+    matrixRandomise(test1->matrix->matrix2d);
 
-    matrix2d_t *weights1 = matrixClone(&test1->content.data->data->matrix2d);
-    matrix2d_t *gradients1 = matrixClone(test1->matrix);
+    matrix2d_t *weights1 = matrixClone(test1->content.data->data->matrix2d);
+    matrix2d_t *gradients1 = matrixClone(test1->matrix->matrix2d);
 
-    matrix2d_t *newWeights = matrixSubtract(weights1, matrixScalarProduct(test1->matrix, lRate));
+    matrix2d_t *newWeights = matrixSubtract(weights1, matrixScalarProduct(test1->matrix->matrix2d, lRate));
 
     sgd(test1, 1, lRate);
     for (int i = 0; i < test1->matrix->matrix2d->nRows; i++) {
         for (int j = 0; j < test1->matrix->matrix2d->nCols; j++) {
-            assertEqual(matrixGet(&(test1->content.data->data->matrix2d), i, j),
+            assertEqual(matrixGet((test1->content.data->data->matrix2d), i, j),
                         matrixGet(newWeights, i, j));
         }
     }
@@ -576,7 +576,7 @@ void testMatrixPooling() {
     matrix2d_t *m1 = matrixCreate(212, 452);
     matrixRandomise(m1);
 
-    matrix_t *gradient = matrixCreate(212, 452);
+    matrix2d_t *gradient = matrixCreate(212, 452);
     matrix2d_t *m1MaxPool = matrixMaxPooling(m1, gradient, 1, 2);
     assertEqual(m1MaxPool->nCols, 452);
     assertEqual(m1MaxPool->nRows, 212);
@@ -851,21 +851,21 @@ void testReadCSV() {
 int main() {
     printf("Starting tests\n\n");
     runTest(testActiveFuncs);
-    // runTest(testMatrix);
-    // runTest(testMatrixDotProduct);
-    // runTest(testMatrixActiveFuncs);
-    // runTest(testMatrixPooling);
-    // runTest(testMatrixConvolution);
-    // runTest(testMatrixDeconvolution);
-    // //runTest(testMatrix3DConvolution);
-    // runTest(testSingleMatrixFuncs);
+    runTest(testMatrix);
+    runTest(testMatrixDotProduct);
+    runTest(testMatrixActiveFuncs);
+    runTest(testMatrixPooling);
+    runTest(testMatrixConvolution);
+    runTest(testMatrixDeconvolution);
+    //runTest(testMatrix3DConvolution);
+    runTest(testSingleMatrixFuncs);
 
-    // runTest(testDataFile);
-    // runTest(testGraph);
-    // runTest(testScheduler);
-    // runTest(testErrorFunctions);
+    runTest(testDataFile);
+    runTest(testGraph);
+    runTest(testScheduler);
+    runTest(testErrorFunctions);
     // runTest(testOptimisers);
-    // runTest(testReadCSV);
+    runTest(testReadCSV);
     printf("%d out of %d tests pass!\n", testsRan - testsFailed, testsRan);
 
     return EXIT_SUCCESS;

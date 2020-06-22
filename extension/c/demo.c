@@ -248,23 +248,9 @@ void trainMNIST() {
     layer1->matrix->matrix3d = toMaxPool;
 
     // Flatten layer
-    double* flattened = calloc(toMaxPool->nRows * toMaxPool->nCols * toMaxPool->nDepth, sizeof(double));
-    for (int i = 0; i < toMaxPool->nRows; i++) {
-        for (int j = 0; j < toMaxPool->nCols; j++) {
-            for (int k = 0; k < toMaxPool->nDepth; k++) {
-                flattened[(i * toMaxPool->nRows) + (j * toMaxPool->nCols) + k] = toMaxPool->data[i][j][k];
-            }
-        }
-    }
+    layer1->matrix->matrix2d = matrixFlatten(toMaxPool);
 
-    matrix2d_t *flattenedTransposed = matrixCreate(1, sizeof(flattened) / sizeof(double));
-    flattenedTransposed->data[0] = flattened;
-    matrix2d_t *flattenedMT = matrixTranspose(flattenedTransposed);
-    layer1->matrix->matrix2d = flattenedMT;
-
-    // should this be? :
-    // node_t *layer4 = denseLayer(layer1, 128, RELU, &entryPoints, &n);
-    node_t *layer4 = denseLayer(layer1, flattenedMT->nRows, RELU, &entryPoints, &n);
+    node_t *layer4 = denseLayer(layer1, 128, RELU, &entryPoints, &n);
 
 
     node_t *layer5 = denseLayer(layer4, 10, SIGMOID, &entryPoints, &n);

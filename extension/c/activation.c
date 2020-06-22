@@ -51,6 +51,7 @@ double sigmoid(double x) {
     return 1 / (1 + exp(-x));
 }
 
+//PRE: x is already sigmoided
 double sigmoidPrime(double x) {
     return x * (1 - x);
     //Return statements are equivalent, but second return statement exceeds double size limit
@@ -65,13 +66,17 @@ double tanhPrime(double x) {
     return 1 - (x * x);
 }
 
-matrix2d_t *softmax(matrix2d_t *matrix) {
+static double softmaxSum(matrix3d_t *matrix) {
     double sum = 0;
     for (int i = 0; i < matrix->nRows; i++) {
         for (int j = 0; j < matrix->nCols; j++) {
             sum += exp(matrixGet(matrix, i, j));
         }
     }
+}
+
+matrix2d_t *softmax(matrix2d_t *matrix) {
+    double sum = softmaxSum(matrix);
     matrix2d_t *result = matrixCreate(matrix->nRows, matrix->nCols);
     for (int i = 0; i < matrix->nRows; i++) {
         for (int j = 0; j < matrix->nCols; j++) {
@@ -81,3 +86,17 @@ matrix2d_t *softmax(matrix2d_t *matrix) {
     return result;
 }
 
+matrix2d_t *softmaxPrime(matrix2d_t *matrix) {    
+    double sum = softmaxSum(matrix);
+    matrix2d_t *result = matrixCreate(matrix->nRows, matrix->nCols);
+    for (int i = 0; i < matrix->nRows; i++) {
+        for (int j = 0; j < matrix->nCols; j++) {
+            if (i == j) {
+                matrixSet(result, i, j, (exp(matrixGet(matrix, i, j)) / sum) * (1 - (exp(matrixGet(matrix, j, i)) / sum)));
+            } else {
+                matrixSet(result, i, j, (exp(matrixGet(matrix, i, j)) / sum) * (- (exp(matrixGet(matrix, j, i)) / sum)));
+            }
+        }
+    }
+    return result;
+}
