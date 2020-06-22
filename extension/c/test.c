@@ -304,11 +304,11 @@ void testDataFile() {
     matrix2d_t *matrix1 = matrixCreate(25, 10);
 
     matrixRandomise(matrix1);
-    node1->content.data->data->matrix2d = *matrix1;
+    node1->content.data->data->matrix2d = matrix1;
     writeBlock(fileWrite1, *node1);
     fclose(fileWrite1);
 
-    data_t *data1 = initData(true, *matrix1);
+    data_t *data1 = initData(true, matrix1);
     data_t **datas1 = readData("dataTest");
     assertOther(dataAreEqual(datas1[0], data1));
 
@@ -321,9 +321,9 @@ void testDataFile() {
         node = nodeInit("test", 6, 8, true);
         matrix2d_t *matrix = matrixCreate(50, 35);
         matrixRandomise(matrix);
-        node->content.data->data->matrix2d = *matrix;
+        node->content.data->data->matrix2d = matrix;
 
-        data_t *data = initData(true, *matrix);
+        data_t *data = initData(true, matrix);
         datas[i] = data;
         writeBlock(fileWrite2, *node);
     }
@@ -377,7 +377,7 @@ void testOptimisers() {
     double decayRate = 0.1;
     //Tets sgd
     node_t *test1 = nodeInit("test1", 0, 2, true);
-    test1->content.data->data->matrix2d = *matrixCreate(100, 235);
+    test1->content.data->data->matrix2d = matrixCreate(100, 235);
     matrixRandomise(&test1->content.data->data->matrix2d);
 
     test1->matrix = matrixCreate(100, 235);

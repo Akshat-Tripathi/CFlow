@@ -4,7 +4,7 @@
 #include "nodes.h"
 
 char *genName(void);
-data_t *initData(bool internalNode, matrix2d_t matrix);
+data_t *initData(bool internalNode, matrix2d_t* matrix);
 void link(node_t *node, node_t **inputs, node_t **outputs);
 graph_t *genGraph(void);
 graph_t *genAdd(void);

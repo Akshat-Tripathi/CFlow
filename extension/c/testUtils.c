@@ -17,11 +17,11 @@ char *genName(void) {
     return str;
 }
 
-data_t *initData(bool internalNode, matrix2d_t matrix) {
+data_t *initData(bool internalNode, matrix2d_t *matrix) {
     data_t *data = malloc(sizeof(data_t));
 	data->data = malloc(sizeof(matrix_t));
     data->internalNode = internalNode;
-    data->data->matrix2d = &matrix;
+    data->data->matrix2d = matrix;
     return data;
 }
 

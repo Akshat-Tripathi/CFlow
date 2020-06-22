@@ -62,8 +62,9 @@ static data_t *readBlock(FILE *file) {
     }
 
     data_t *data = malloc(sizeof(data_t));
+    data->data = malloc(sizeof(matrix_t));
     data->internalNode = true;
-    data->data = matrix;
+    data->data->matrix2d = matrix;
     return data;
 }
 
