@@ -15,7 +15,8 @@ enum matrixFunction {
     ROTATE,
     MAX_POOLING,
     AVERAGE_POOLING,
-    TRANSPOSE  //PRE: Won't ever be in a forward pass
+    TRANSPOSE,  //PRE: Won't ever be in a forward pass
+    FLATTEN
 };
 
 typedef struct matrix2d {
