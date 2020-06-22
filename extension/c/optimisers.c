@@ -16,7 +16,7 @@ void sgd(node_t *weight, int nArgs, ...) {
     va_end(args);
 
     matrix2d_t *newWeights = matrixSubtract(weight->content.data->data->matrix2d, 
-                                            matrixScalarProduct(weight->matrix, lRate));
+                                            matrixScalarProduct(weight->matrix->matrix2d, lRate));
     weight->content.data->data->matrix2d = newWeights;
 }
 
@@ -33,13 +33,13 @@ void sgdMomentum(node_t *weight, int nArgs, ...) {
     double momentum = va_arg(args, double); 
     va_end(args);
 
-    matrix2d_t *newVelocity = matrixSubtract(matrixScalarProduct(weight->optimiserMatrix, momentum), 
-                                             matrixScalarProduct(weight->matrix, lRate));
+    matrix2d_t *newVelocity = matrixSubtract(matrixScalarProduct(weight->optimiserMatrix->matrix2d, momentum), 
+                                             matrixScalarProduct(weight->matrix->matrix2d, lRate));
     matrix2d_t *newWeight = matrixAdd(weight->content.data->data->matrix2d, newVelocity);
 
     weight->content.data->data->matrix2d = newWeight;
-    matrixFree(weight->optimiserMatrix);
-    weight->optimiserMatrix = newVelocity;
+    matrixFree(weight->optimiserMatrix->matrix2d);
+    weight->optimiserMatrix->matrix2d = newVelocity;
 }
 
 static double inverse(double a) {
@@ -60,11 +60,11 @@ void adagrad(node_t *weight, int nArgs, ...) {
     double delta = va_arg(args, double); 
     va_end(args);
 
-    matrix2d_t *newR = matrixAdd(weight->optimiserMatrix,
-                               matrixMultiplyElementWise(weight->matrix, weight->matrix));
+    matrix2d_t *newR = matrixAdd(weight->optimiserMatrix->matrix2d,
+                               matrixMultiplyElementWise(weight->matrix->matrix2d, weight->matrix->matrix2d));
 
     //No easy way to add delta to each of r's elements
-    matrix2d_t *denomConstant = matrixSquareRoot(weight->optimiserMatrix);
+    matrix2d_t *denomConstant = matrixSquareRoot(weight->optimiserMatrix->matrix2d);
     for (int i = 0; i < denomConstant->nRows; i++) {
         for (int j = 0; j < denomConstant->nCols; j++) {
             matrixSet(denomConstant, i, j, matrixGet(denomConstant, i, j) + delta);
@@ -72,10 +72,10 @@ void adagrad(node_t *weight, int nArgs, ...) {
     }
     matrix2d_t *constant = matrixScalarProduct(matrixElementWise(denomConstant, inverse), lRate);
     matrix2d_t *newWeight = matrixSubtract(weight->content.data->data->matrix2d,
-                                         matrixMultiplyElementWise(constant, weight->matrix));
+                                         matrixMultiplyElementWise(constant, weight->matrix->matrix2d));
     weight->content.data->data->matrix2d = newWeight;
-    matrixFree(weight->optimiserMatrix);
-    weight->optimiserMatrix = newR;
+    matrixFree(weight->optimiserMatrix->matrix2d);
+    weight->optimiserMatrix->matrix2d = newR;
     matrixFree(denomConstant);
     matrixFree(constant);
 }
@@ -94,11 +94,11 @@ void RMSProp(node_t *weight, int nArgs, ...) {
     double delta = va_arg(args, double); 
     va_end(args);
 
-    matrix2d_t *newR = matrixAdd(matrixScalarProduct(weight->optimiserMatrix, decayRate),
-                               matrixScalarProduct(matrixMultiplyElementWise(weight->matrix, weight->matrix), 1.0 - decayRate));
+    matrix2d_t *newR = matrixAdd(matrixScalarProduct(weight->optimiserMatrix->matrix2d, decayRate),
+                               matrixScalarProduct(matrixMultiplyElementWise(weight->matrix->matrix2d, weight->matrix->matrix2d), 1.0 - decayRate));
 
     //No easy way to add delta to each of r's elements
-    matrix2d_t *denomConstant = matrixSquareRoot(weight->optimiserMatrix);
+    matrix2d_t *denomConstant = matrixSquareRoot(weight->optimiserMatrix->matrix2d);
     for (int i = 0; i < denomConstant->nRows; i++) {
         for (int j = 0; j < denomConstant->nCols; j++) {
             matrixSet(denomConstant, i, j, matrixGet(denomConstant, i, j) + delta);
@@ -106,10 +106,10 @@ void RMSProp(node_t *weight, int nArgs, ...) {
     }
     matrix2d_t *constant = matrixScalarProduct(matrixElementWise(denomConstant, inverse), lRate);
     matrix2d_t *newWeight = matrixSubtract(weight->content.data->data->matrix2d, 
-                                         matrixMultiplyElementWise(constant, weight->matrix));
+                                         matrixMultiplyElementWise(constant, weight->matrix->matrix2d));
     weight->content.data->data->matrix2d = newWeight;
-    matrixFree(weight->optimiserMatrix);
-    weight->optimiserMatrix = newR;
+    matrixFree(weight->optimiserMatrix->matrix2d);
+    weight->optimiserMatrix->matrix2d = newR;
     matrixFree(denomConstant);
     matrixFree(constant);
 }

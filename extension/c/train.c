@@ -148,7 +148,7 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
             graphPoint = graph->exitPoints[j];
             lossPoint = lossPoints[j];
             lossPoint->content.data->data->matrix2d = 
-                dLoss(lossPoint->content.data->data->matrix2d, graphPoint->inputs[0]->matrix);
+                dLoss(lossPoint->content.data->data->matrix2d, graphPoint->inputs[0]->matrix->matrix2d);
             error = 0;
             double temp;
             for (int k = 0; k < batchSize; k++) {

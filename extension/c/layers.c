@@ -24,8 +24,8 @@ node_t *denseLayer(node_t *x, int nNeurons,
         enum activationFunction activationFunction, 
         node_t ***entryPoints, int *length) {
 
-    matrix2d_t *weightMT = generateRandMatrix(x->matrix->nCols, nNeurons);
-    matrix2d_t *biasMT = matrixCreate(x->matrix->nRows, nNeurons);
+    matrix2d_t *weightMT = generateRandMatrix(x->matrix->matrix2d->nCols, nNeurons);
+    matrix2d_t *biasMT = matrixCreate(x->matrix->matrix2d->nRows, nNeurons);
     
     char *weightName = calloc(MAX_NODE_NAME_LENGTH + 1, sizeof(char));
     char *biasName = calloc(MAX_NODE_NAME_LENGTH + 1, sizeof(char));
@@ -63,7 +63,7 @@ node_t *denseLayer(node_t *x, int nNeurons,
     push(entryPoints, length, weight);
     push(entryPoints, length, bias);
 
-    activFunc->matrix = matrixCreate(x->matrix->nRows, nNeurons);
+    activFunc->matrix->matrix2d = matrixCreate(x->matrix->matrix2d->nRows, nNeurons);
 
     return activFunc;
 }
@@ -78,7 +78,7 @@ node_t *convolutionalLayer(node_t *x, int nChannels, int kernelSize,
 
     matrix2d_t *kernelMT = generateRandMatrix(kernelSize, kernelSize);
 
-    int dimension = ((x->matrix->nCols - kernelSize + 2 * padding) / stride) + 1;
+    int dimension = ((x->matrix->matrix2d->nCols - kernelSize + 2 * padding) / stride) + 1;
 
     matrix2d_t *biasMT = matrixCreate(dimension, dimension);
     
@@ -124,7 +124,7 @@ node_t *convolutionalLayer(node_t *x, int nChannels, int kernelSize,
     push(entryPoints, length, kernel);
     push(entryPoints, length, bias);
 
-    activFunc->matrix = matrixCreate(dimension, dimension);
+    activFunc->matrix->matrix2d = matrixCreate(dimension, dimension);
 
     return activFunc;
 }
@@ -140,12 +140,12 @@ static node_t *LSTMGate(node_t *x, node_t *prevOutput,
 
     //activationFunction(dot(x, W) + dot(prev, U) + b)
 
-    int nNeurons  = prevOutput->matrix->nCols;
+    int nNeurons  = prevOutput->matrix->matrix2d->nCols;
     //int batchSize = prevOutput->matrix->nRows;
 
-    matrix2d_t *weightMTW = generateRandMatrix(x->matrix->nCols, nNeurons);
+    matrix2d_t *weightMTW = generateRandMatrix(x->matrix->matrix2d->nCols, nNeurons);
     matrix2d_t *weightMTU = generateRandMatrix(nNeurons, nNeurons);
-    matrix2d_t *biasMT = matrixCreate(x->matrix->nRows, nNeurons);
+    matrix2d_t *biasMT = matrixCreate(x->matrix->matrix2d->nRows, nNeurons);
     
     char *weightWName = calloc(MAX_NODE_NAME_LENGTH + 1, sizeof(char));
     char *weightUName = calloc(MAX_NODE_NAME_LENGTH + 1, sizeof(char));
@@ -288,13 +288,13 @@ static node_t *LSTMCell(node_t *x, node_t *prevOutput, node_t *prevState,
     linkNodes(tanh, output);
     linkNodes(outputGate, output);
 
-    state->matrix = matrixCreate(prevState->matrix->nRows,
-                                 prevState->matrix->nCols);
+    state->matrix->matrix2d = matrixCreate(prevState->matrix->matrix2d->nRows,
+                                 prevState->matrix->matrix2d->nCols);
 
     *nextState = state;
 
-    output->matrix = matrixCreate(prevOutput->matrix->nRows,
-                                  prevOutput->matrix->nCols);
+    output->matrix->matrix2d = matrixCreate(prevOutput->matrix->matrix2d->nRows,
+                                  prevOutput->matrix->matrix2d->nCols);
 
     return output;
 }
@@ -302,7 +302,7 @@ static node_t *LSTMCell(node_t *x, node_t *prevOutput, node_t *prevState,
 static node_t *clone(node_t *node) {
     node_t *cln = nodeInit(node->name, node->n, node->m, node->isData);
     cln->content = node->content;
-    cln->matrix = matrixCreate(node->matrix->nRows, node->matrix->nCols);
+    cln->matrix->matrix2d = matrixCreate(node->matrix->matrix2d->nRows, node->matrix->matrix2d->nCols);
     return cln; 
 }
 
@@ -312,14 +312,14 @@ graph_t *LSTM(node_t **inputs, int timeSteps, enum activationFunction func, int 
     int length = 0;
 
     node_t *prevOutput = nodeInit("OUTPUT", 0, 4, true);
-    prevOutput->matrix = matrixCreate(inputs[0]->matrix->nRows, nNeurons);
-    prevOutput->content.data->data->matrix2d = prevOutput->matrix;
+    prevOutput->matrix->matrix2d = matrixCreate(inputs[0]->matrix->matrix2d->nRows, nNeurons);
+    prevOutput->content.data->data->matrix2d = prevOutput->matrix->matrix2d;
     
 
 
     node_t *prevState = nodeInit("STATE", 0, 1, true);
-    prevState->matrix = matrixCreate(inputs[0]->matrix->nRows, nNeurons);
-    prevState->content.data->data->matrix2d = prevState->matrix;
+    prevState->matrix->matrix2d = matrixCreate(inputs[0]->matrix->matrix2d->nRows, nNeurons);
+    prevState->content.data->data->matrix2d = prevState->matrix->matrix2d;
     
     node_t *nextState;
 
