@@ -486,6 +486,16 @@ matrix3d_t *matrixUnflatten(matrix2d_t *matrix, double* dimensions) {
     return unflattened;
 }
 
+double* flatten2d(matrix2d_t *matrix) {
+    double *flattened = calloc(matrix->nRows * matrix->nCols, sizeof(double));
+    for (int i = 0; i < matrix->nRows; i++) {
+        for (int j = 0; j < matrix->nCols; j++) {
+            flattened[(i * matrix->nRows) + j] = matrixGet(matrix, i, j);
+        }
+    }
+    return flattened;
+}
+
 void matrixPrint(matrix2d_t *matrix) {
     for (int i = 0; i < matrix->nRows; i++) {
         for (int j = 0; j < matrix->nCols; j++) {

@@ -66,6 +66,7 @@ bool areMatrixesEqual(matrix2d_t *matrix1, matrix2d_t *matrix2, double tolerance
 
 matrix2d_t *matrixFlatten(matrix3d_t *matrix);
 matrix3d_t *matrixUnflatten(matrix2d_t *matrix, double* dimensions);
+double* flatten2d(matrix2d_t *matrix);
 
 void matrixPrint(matrix2d_t *matrix);
 

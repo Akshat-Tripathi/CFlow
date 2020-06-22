@@ -261,6 +261,8 @@ void trainMNIST() {
 
     node_t **exitPoints = malloc(sizeof(node_t*));
     exitPoints[0] = y;
+
+    linkNodes(layer5, y);
     graph_t *network = graphInit("mnist", n, entryPoints, 1, exitPoints);
 
     // Convert labels into CFlow format
@@ -269,13 +271,61 @@ void trainMNIST() {
 
     matrix2d_t **inputs;
     matrix2d_t **targets = calloc(1, sizeof(matrix2d_t*));
-    targets[0] = matrixCreate(nInstances, 1);
     targets[0] = matrixTranspose(labelMTTransposed);
-
-    linkNodes(layer5, y);
 
     // Don't know if batch size of 100 is right
     train(network, inputs, targets, 0.1, 100, CSL, 100, SGD);
+}
+
+void trainMNISTSimple() {
+    node_t *x = nodeInit("x", 0, 1, true);
+    x->content.data->internalNode = false;
+
+    int nInstances = 60000;
+
+    int batchSize = 100;
+    x->matrix->matrix2d = matrixCreate(batchSize, 784);
+
+    // Loading training data
+    csvDataPack_t trainingData = readCSV("data/mnist_train.csv", nInstances);
+    matrix2d_t** inputs = calloc(1, sizeof(matrix2d_t*));
+    inputs[0] = matrixCreate(nInstances, 784);
+    matrix2d_t** matrixData = trainingData.matrixInputs;
+    for (int i = 0; i < nInstances; i++) {
+        inputs[0]->data[i] = flatten2d(matrixData[i]);
+        printf("%d\n", inputs[0]->data[i][0]);
+    }
+
+
+    node_t **entryPoints = NULL;
+    int n = 0;
+
+    push(&entryPoints, &n, x);
+
+    //Add sequential model
+    node_t *layer1 = denseLayer(x, 64, RELU, &entryPoints, &n);
+    node_t *layer2 = denseLayer(layer1, 64, RELU, &entryPoints, &n);
+    node_t *layer3 = denseLayer(layer2, 10, SIGMOID, &entryPoints, &n);
+
+    node_t *y = nodeInit("y", 1, 0, true);
+    y->content.data->internalNode = false;
+
+    linkNodes(layer3, y);
+
+    node_t **exitPoints = malloc(sizeof(node_t*));
+    exitPoints[0] = y;
+    graph_t *network = graphInit("mnist", n, entryPoints, 1, exitPoints);
+
+    // Convert labels into CFlow format
+    matrix2d_t *labelMTTransposed = matrixCreate(1, nInstances);
+    labelMTTransposed->data[0] = trainingData.labels;
+
+    matrix2d_t **targets = calloc(1, sizeof(matrix2d_t*));
+    targets[0] = matrixTranspose(labelMTTransposed);
+
+    // Don't know if batch size of 100 is right
+    train(network, inputs, targets, 0.1, 5, CSL, batchSize, SGD);
+    
 }
 
 int main(void) {
@@ -311,7 +361,8 @@ int main(void) {
     writeGraph(compile(lstm, "lstmDiff"));
     free(inputs);*/
 
-    trainXOR();
-    trainMNIST();
+    //trainXOR();
+    //trainMNIST();
+    trainMNISTSimple();
     return EXIT_SUCCESS;
 }
