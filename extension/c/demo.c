@@ -284,7 +284,7 @@ void trainMNISTSimple() {
 
     int nInstances = 60000;
 
-    int batchSize = 100;
+    int batchSize = 1;
     x->matrix->matrix2d = matrixCreate(batchSize, 784);
 
     // Loading training data
@@ -294,7 +294,6 @@ void trainMNISTSimple() {
     matrix2d_t** matrixData = trainingData.matrixInputs;
     for (int i = 0; i < nInstances; i++) {
         inputs[0]->data[i] = flatten2d(matrixData[i]);
-        printf("%.3f\n", inputs[0]->data[i][210]);
     }
 
 
@@ -362,8 +361,8 @@ int main(void) {
     writeGraph(compile(lstm, "lstmDiff"));
     free(inputs);*/
 
-    //trainXOR();
-    trainMNISTSimple();
+    trainXOR();
+    //trainMNISTSimple();
     //trainMNIST();
     return EXIT_SUCCESS;
 }

@@ -1,0 +1,46 @@
+{
+    "version": "2.0.0",
+    "tasks": [{
+        "label": "build",
+        "command": "gcc", // Could be any other shell command
+		"args": [
+			"-g",
+			"nodes.h",
+			"testUtils.h",
+			"util.h",
+			"graphix.h",
+			"scheduler.h",
+			"activation.h",
+			"matrix.h",
+            "layers.h",
+            "predict.h",
+            "error.h",
+            "optimisers.h",
+            "train.h",
+            "file.h",
+            "data.h",
+            "readCSV.h",
+			"c/nodes.c",
+			"c/testUtils.c",
+			"c/util.c",
+			"c/graphix.c",
+			"c/scheduler.c",
+			"c/activation.c",
+			"c/matrix.c",
+			"c/layers.c",
+            "c/compiler.c",
+            "c/predict.c",
+            "c/error.c",
+            "c/optimisers.c",
+            "c/train.c",
+            "c/file.c",
+            "c/data.c",
+            "c/readCSV.c",
+            "c/demo.c",
+			"-o",
+			"demo",
+			"-lm"
+		],
+        "type": "shell"
+    }]
+}

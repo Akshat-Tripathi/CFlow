@@ -1,0 +1,1 @@
+digraph test{BIAS1[shape=box];BIAS1->ADD1;ADD1[shape=circle];ADD1->FUNC1;FUNC1[shape=circle];FUNC1->y;y[shape=box];WEIGHT1[shape=box];WEIGHT1->DOT1;DOT1[shape=circle];DOT1->ADD1;BIAS0[shape=box];BIAS0->ADD0;ADD0[shape=circle];ADD0->FUNC0;FUNC0[shape=circle];FUNC0->DOT1;WEIGHT0[shape=box];WEIGHT0->DOT0;DOT0[shape=circle];DOT0->ADD0;x[shape=box];x->DOT0;}

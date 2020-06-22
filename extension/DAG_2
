@@ -1,0 +1,1 @@
+digraph test{G[shape=box];G->D;D[shape=box];D->E;E[shape=box];E->F;F[shape=box];A[shape=box];A->B;B[shape=box];B->C,D,E;C[shape=box];C->E;}

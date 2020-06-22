@@ -120,7 +120,7 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
     int inputIdx = 0;
     double error;
 
-    for (int i = 0; i < epochs; i++) {
+    for (int i = 0; i < epochs + 1; i++) {
         //Prime graphs with data
         if (batchSize < nInputs) {
             target = sample(inputs, targets, batchSize, &input, nInputs, nTargets);
@@ -140,6 +140,18 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
 
         execute(forward, nNodesForward, FORWARD, NULL, 0);
         
+
+        if (epochs == i) {
+            for (int j = 0; j < batchSize; j++) {
+                printf("hi");
+                printf("Input: [%lf, %lf] -> Prediction: %lf\n",
+                                        input[0]->data[j][0],
+                                        input[0]->data[j][1],
+                                        graph->exitPoints[0]->inputs[0]->matrix->matrix2d->data[j][0]);
+            }
+            break;
+        }
+
         //generate loss
 
         node_t *graphPoint, *lossPoint;
