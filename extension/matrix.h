@@ -33,6 +33,7 @@ typedef struct matrix3d {
 } matrix3d_t;
 
 matrix2d_t *matrixCreate(int nRows, int nCols);
+matrix3d_t *matrix3DCreate(int nRows, int nCols, int nDepth);
 double matrixGet(matrix2d_t *matrix, int row, int col);
 void matrixSet(matrix2d_t *matrix, int row, int col, double value);
 double randFloat();

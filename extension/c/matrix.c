@@ -25,6 +25,24 @@ matrix2d_t *matrixCreate(int nRows, int nCols) {
     return matrix;
 }
 
+matrix3d_t *matrix3DCreate(int nRows, int nCols, int nDepth) {
+    matrix3d_t *matrix = malloc(sizeof(matrix3d_t));
+
+    matrix->nRows = nRows;
+    matrix->nCols = nCols;
+    matrix->nDepth = nDepth;
+
+    double ***data = calloc(nRows, sizeof(double*));
+    for (int i = 0; i < nRows; i++) {
+        data[i] = calloc(nCols, sizeof(double*));
+        for (int j = 0; j < nCols; j++) {
+            data[i][j] = calloc(nDepth, sizeof(double));
+        }
+    }
+    matrix->data = data;
+    return matrix;
+}
+
 double matrixGet(matrix2d_t *matrix, int row, int col) {
     assert(matrix);
     return matrix->data[row][col];
