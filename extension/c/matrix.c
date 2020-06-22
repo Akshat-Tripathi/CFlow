@@ -458,6 +458,34 @@ bool areMatrixesEqual(matrix2d_t *matrix1, matrix2d_t *matrix2, double tolerance
     return true;
 }
 
+matrix2d_t *matrixFlatten(matrix3d_t *matrix) {
+    matrix2d_t *flatTranspose = matrixCreate(1, matrix->nRows * matrix->nCols * matrix->nDepth);
+
+    for (int i = 0; i < matrix->nRows; i++) {
+        for (int j = 0; j < matrix->nCols; j++) {
+            for (int k = 0; k < matrix->nDepth; k++) {
+                matrixSet(flatTranspose, (i * matrix->nRows) + (j * matrix->nCols) + k, 0, matrix->data[i][j][k]);
+            }
+        }
+    }
+    matrix2d_t *flattened = matrixTranspose(flatTranspose);
+    matrixFree(flatTranspose);
+    return flattened;
+}
+
+matrix3d_t *matrixUnflatten(matrix2d_t *matrix, double* dimensions) {
+    matrix3d_t *unflattened = matrix3DCreate(dimensions[0], dimensions[1], dimensions[2]);
+
+    for (int i = 0; i < unflattened->nRows; i++) {
+        for (int j = 0; j < unflattened->nCols; j++) {
+            for (int k = 0; k < unflattened->nDepth; k++) {
+                unflattened->data[i][j][k] = matrixGet(matrix, (i * unflattened->nRows) + (j * unflattened->nCols) + k, 0);
+            }
+        }
+    }
+    return unflattened;
+}
+
 void matrixPrint(matrix2d_t *matrix) {
     for (int i = 0; i < matrix->nRows; i++) {
         for (int j = 0; j < matrix->nCols; j++) {
