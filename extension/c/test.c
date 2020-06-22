@@ -275,7 +275,7 @@ void testSingleMatrixFuncs() {
     double* flattenM4 = flatten2d(m4);
     for (int i = 0; i < m4->nRows; i++) {
         for (int j = 0; j < m4->nCols; j++) {
-            assertEqual(flattenM4[(i * m4->nRows) + j], matrixGet(m4, i, j));
+            assertEqual(flattenM4[(i * m4->nCols) + j], matrixGet(m4, i, j));
         }
     }
 }

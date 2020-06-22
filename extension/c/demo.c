@@ -294,7 +294,7 @@ void trainMNISTSimple() {
     matrix2d_t** matrixData = trainingData.matrixInputs;
     for (int i = 0; i < nInstances; i++) {
         inputs[0]->data[i] = flatten2d(matrixData[i]);
-        printf("%d\n", inputs[0]->data[i][0]);
+        printf("%.3f\n", inputs[0]->data[i][210]);
     }
 
 
