@@ -51,6 +51,7 @@ double sigmoid(double x) {
     return 1 / (1 + exp(-x));
 }
 
+//PRE: x is already sigmoided
 double sigmoidPrime(double x) {
     return x * (1 - x);
     //Return statements are equivalent, but second return statement exceeds double size limit
