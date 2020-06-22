@@ -47,3 +47,4 @@ clean:
 	rm -f $(wildcard */*.o)
 	rm -f $(wildcard */*/*.o)
 	rm -f c/test
+	rm -f c/demo
