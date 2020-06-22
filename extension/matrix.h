@@ -1,20 +1,19 @@
 #ifndef _matrix_h_
 #define _matrix_h_
 
-#include "activation.h"
 #include <stdbool.h>
 
 enum matrixFunction {
     ADD,
-	ACTIVATION,
+    ACTIVATION,
     SUBTRACT,
-    MULTIPLY, 
-    DOT, 
-    CONVOLUTION, 
+    MULTIPLY,
+    DOT,
+    CONVOLUTION,
     DECONVOLUTION,
-	DILATE,
-	ROTATE,
-    MAX_POOLING, 
+    DILATE,
+    ROTATE,
+    MAX_POOLING,
     AVERAGE_POOLING,
     TRANSPOSE  //PRE: Won't ever be in a forward pass
 };
@@ -32,6 +31,8 @@ typedef struct matrix3d {
     int nDepth;
 } matrix3d_t;
 
+
+#include "activation.h"
 matrix2d_t *matrixCreate(int nRows, int nCols);
 matrix3d_t *matrix3DCreate(int nRows, int nCols, int nDepth);
 double matrixGet(matrix2d_t *matrix, int row, int col);

@@ -32,7 +32,7 @@ c/optimisers.o:
 
 c/predict.o: predict.h data.h matrix.h nodes.h util.h
 
-c/readCSV.o: matrix.h
+c/readCSV.o: readCSV.h matrix.h
 
 c/scheduler.o: scheduler.h nodes.h util.h testUtils.h
 

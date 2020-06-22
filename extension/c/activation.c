@@ -1,12 +1,15 @@
+
+
 #include "../activation.h"
-#include "../matrix.h"
 
-#include <stdio.h>
-#include <math.h>
 #include <assert.h>
+#include <math.h>
+#include <stdio.h>
 
+#include "../matrix.h"
 enum activationFunction getDeriv(enum activationFunction func) {
     switch (func) {
+
         case LRELU:   return LRELU_PRIME;
         case LINEAR:  return LINEAR_PRIME;
         case RELU: 	  return RELU_PRIME;
@@ -61,3 +64,20 @@ double tanhActive(double x) {
 double tanhPrime(double x) {
     return 1 - (x * x);
 }
+
+matrix2d_t *softmax(matrix2d_t *matrix) {
+    double sum = 0;
+    for (int i = 0; i < matrix->nRows; i++) {
+        for (int j = 0; j < matrix->nCols; j++) {
+            sum += exp(matrixGet(matrix, i, j));
+        }
+    }
+    matrix2d_t *result = matrixCreate(matrix->nRows, matrix->nCols);
+    for (int i = 0; i < matrix->nRows; i++) {
+        for (int j = 0; j < matrix->nCols; j++) {
+            matrixSet(result, i, j, exp(matrixGet(matrix, i, j)) / sum);
+        }
+    }
+    return result;
+}
+
