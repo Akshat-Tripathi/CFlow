@@ -13,6 +13,8 @@
 void execute(node_t **nodes, int length, enum executionMode mode,
              void (*optimiser)(node_t *, int nArgs, ...), int nArgs, ...) {
 
+    va_list args;
+
     node_t *node;
     for (int i = length - 1; i >= 0; i--) {
         node = nodes[i];
@@ -28,7 +30,7 @@ void execute(node_t **nodes, int length, enum executionMode mode,
                     for (int j = 0; j < node->n; j++) {
                         node->matrix = matrixAdd(node->matrix, 
                                                  node->inputs[j]->matrix);
-                        //optimiser(node, nArgs, args);
+                        optimiser(node, nArgs, args);
                     }
                 } else {
                    node->matrix = matrixClone(node->content.data->data->matrix2d); 
@@ -36,7 +38,7 @@ void execute(node_t **nodes, int length, enum executionMode mode,
                 break;
             case UPDATE:
                 if (node->content.data->internalNode && 'd' == *(node->name)) {
-                    free(node->content.data->data);
+                    free(node->content.data->data->matrix2d);
                     node->content.data->data->matrix2d = matrixClone(node->matrix);
                     free(node->matrix);
                 }
@@ -113,10 +115,10 @@ void execute(node_t **nodes, int length, enum executionMode mode,
                     exit(EXIT_FAILURE); 
             }
         }
-        //if (BACKWARD == mode) {
+        /*if (FORWARD == mode) {
             printf("%s\n", node->name);
             if (node->matrix) if(node->matrix->data) printMatrix(node->matrix);
             printf("\n\n");
-        //}
+        }*/
     }
 }

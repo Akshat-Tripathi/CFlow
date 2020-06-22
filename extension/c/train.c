@@ -128,6 +128,7 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
             target = targets;
             input = inputs;
         }
+
         for (int j = 0; j < graph->n && inputIdx < nInputs; j++) {
             if (!graph->entryPoints[j]->content.data->internalNode) 
                 graph->entryPoints[j]->content.data->data->matrix2d = input[inputIdx++];
@@ -149,8 +150,10 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
             lossPoint->content.data->data->matrix2d = 
                 dLoss(lossPoint->content.data->data->matrix2d, graphPoint->inputs[0]->matrix);
             error = 0;
+            double temp;
             for (int k = 0; k < batchSize; k++) {
-                error += matrixGet(lossPoint->content.data->data->matrix2d, k, 0);
+                temp = matrixGet(lossPoint->content.data->data->matrix2d, k, 0);
+                error += temp * temp;
             }
             printf("Loss at epoch: %d is %lf\n", i, error / batchSize);
         }
