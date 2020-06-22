@@ -166,8 +166,26 @@ node_t *_differentiate(node_t *node, node_t ***lossPoints, int *nLoss) {
                 matrixSet(mat, 0, 1, 0);}
                 break;
             case MAX_POOLING:
+                derivative = nodeInit("dMAXPOOLING", 1, 1, false);
+                derivative->content.operation.funcName = MAX_POOLING;
+                linkDeriv(derivative, _differentiate(node->inputs[0], lossPoints, nLoss));
                 break;
             case AVERAGE_POOLING:
+                break;
+            case FLATTEN:
+                derivative = nodeInit("FLATTEN", 2, 1, false);
+                derivative->content.operation.funcName = FLATTEN;
+
+                node_t *config = nodeInit("config", 0, 1, true);
+                config->matrix->matrix2d = matrixCreate(1, 3);
+                
+                matrix3d_t *inputMatrix = node->inputs[0]->matrix->matrix3d;
+                matrixSet(config->matrix->matrix2d, 0, 0, inputMatrix->nRows);
+                matrixSet(config->matrix->matrix2d, 0, 1, inputMatrix->nCols);
+                matrixSet(config->matrix->matrix2d, 0, 2, inputMatrix->nDepth);
+                derivative->inputs[1] = config;
+
+                linkDeriv(derivative,  _differentiate(node->inputs[0], lossPoints, nLoss));
                 break;
             default:
             //TODO: efficientise
