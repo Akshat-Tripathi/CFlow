@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Wall -g -D_DEFAULT_SOURCE -std=c99
+CFLAGS  = -Wall -g -D_DEFAULT_SOURCE -pedantic -std=c99
 LDLIBS=-lm
 
 .SUFFIXES: .c .o
