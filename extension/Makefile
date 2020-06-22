@@ -8,7 +8,7 @@ LDLIBS=-lm
 
 all: c/demo c/test
 
-c/demo: c/nodes.o c/testUtils.o c/util.o c/graphix.o c/scheduler.o c/activation.o c/matrix.o c/layers.o c/predict.o c/error.o c/compiler.o c/file.o c/data.o c/optimisers.o c/train.o
+c/demo: c/nodes.o c/testUtils.o c/util.o c/graphix.o c/scheduler.o c/activation.o c/matrix.o c/layers.o c/predict.o c/error.o c/compiler.o c/file.o c/data.o c/optimisers.o c/train.o c/readCSV.o
 
 c/train: c/train.o c/nodes.o c/testUtils.o c/util.o c/graphix.o c/scheduler.o c/activation.o c/matrix.o c/layers.o c/predict.o c/error.o c/compiler.o c/optimisers.o
 

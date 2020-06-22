@@ -215,11 +215,12 @@ void trainMNIST() {
 
     int nInstances = 60000;
 
-    x->matrix = matrix3DCreate(nInstances, 28, 28);
-    csvDataPack_t trainingData = readCSV("data/mnist_train.csv", "r");
+    // Load training data
+    x->matrix->matrix3d = matrix3DCreate(nInstances, 28, 28);
+    csvDataPack_t trainingData = readCSV("data/mnist_train.csv", nInstances);
     matrix2d_t** matrixData = trainingData.matrixInputs;
     for (int i = 0; i < nInstances; i++) {
-        x->matrix[i].data = matrixData[i]->data;
+        x->matrix->matrix3d->data[i] = matrixData[i]->data;
     }
 
 
@@ -228,14 +229,67 @@ void trainMNIST() {
 
     push(&entryPoints, &n, x);
 
+
+    // Add sequential model
     node_t *layer1 = convolutionalLayer(x, 1, 3, 32, RELU, 1, 0, &entryPoints, &n);
 
-    matrix3d_t* gradientOnes = NULL;
-    matrix2d_t* maxPooled = matrixMaxPooling(layer1->matrix, gradientOnes, 1, 2);
+    // Max Pooling Layer
+    matrix3d_t *toMaxPool = layer1->matrix->matrix3d;
+    matrix2d_t **maxPoolGradients = calloc(toMaxPool->nRows, sizeof(matrix2d_t*));
 
-    //double* flattened = calloc(maxPooled->, sizeof(double));
+    for (int i = 0; i < toMaxPool->nRows; i++) {
+        matrix2d_t *tmp = matrixCreate(toMaxPool->nCols, toMaxPool->nDepth);
+        tmp->data = toMaxPool->data[i];
 
-    // node_t *layer4 = denseLayer()
+        matrix2d_t* maxPooledTmp = matrixMaxPooling(tmp, maxPoolGradients[i], 1, 2);
+        toMaxPool->data[i] = maxPooledTmp->data;
+    }
+
+    layer1->matrix->matrix3d = toMaxPool;
+
+    // Flatten layer
+    double* flattened = calloc(toMaxPool->nRows * toMaxPool->nCols * toMaxPool->nDepth, sizeof(double));
+    for (int i = 0; i < toMaxPool->nRows; i++) {
+        for (int j = 0; j < toMaxPool->nCols; j++) {
+            for (int k = 0; k < toMaxPool->nDepth; k++) {
+                flattened[(i * toMaxPool->nRows) + (j * toMaxPool->nCols) + k] = toMaxPool->data[i][j][k];
+            }
+        }
+    }
+
+    matrix2d_t *flattenedTransposed = matrixCreate(1, sizeof(flattened) / sizeof(double));
+    flattenedTransposed->data[0] = flattened;
+    matrix2d_t *flattenedMT = matrixTranspose(flattenedTransposed);
+    layer1->matrix->matrix2d = flattenedMT;
+
+    // should this be? :
+    // node_t *layer4 = denseLayer(layer1, 128, RELU, &entryPoints, &n);
+    node_t *layer4 = denseLayer(layer1, flattenedMT->nRows, RELU, &entryPoints, &n);
+
+
+    node_t *layer5 = denseLayer(layer4, 10, SIGMOID, &entryPoints, &n);
+
+    // Output layer
+    node_t *y = nodeInit("y", 1, 0, true);
+    y->content.data->internalNode = false;
+
+    node_t **exitPoints = malloc(sizeof(node_t*));
+    exitPoints[0] = y;
+    graph_t *network = graphInit("mnist", n, entryPoints, 1, exitPoints);
+
+    // Convert labels into CFlow format
+    matrix2d_t *labelMTTransposed = matrixCreate(1, nInstances);
+    labelMTTransposed->data[0] = trainingData.labels;
+
+    matrix2d_t **inputs;
+    matrix2d_t **targets = calloc(1, sizeof(matrix2d_t*));
+    targets[0] = matrixCreate(nInstances, 1);
+    targets[0] = matrixTranspose(labelMTTransposed);
+
+    linkNodes(layer5, y);
+
+    // Don't know if batch size of 100 is right
+    train(network, inputs, targets, 0.1, 100, CSL, 100, SGD);
 }
 
 int main(void) {
@@ -272,6 +326,6 @@ int main(void) {
     free(inputs);*/
 
     trainXOR();
-
+    trainMNIST();
     return EXIT_SUCCESS;
 }
