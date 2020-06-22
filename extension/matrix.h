@@ -15,7 +15,8 @@ enum matrixFunction {
     ROTATE,
     MAX_POOLING,
     AVERAGE_POOLING,
-    TRANSPOSE  //PRE: Won't ever be in a forward pass
+    TRANSPOSE,  //PRE: Won't ever be in a forward pass
+    FLATTEN
 };
 
 typedef struct matrix2d {
@@ -65,8 +66,8 @@ matrix2d_t *matrixAveragePooling(matrix2d_t *matrix, matrix2d_t *gradient, int s
 bool areMatrixesEqual(matrix2d_t *matrix1, matrix2d_t *matrix2, double tolerance);
 
 matrix2d_t *matrixFlatten(matrix3d_t *matrix);
-matrix3d_t *matrixUnflatten(matrix2d_t *matrix, double* dimensions);
 double* flatten2d(matrix2d_t *matrix);
+matrix3d_t *matrixUnflatten(matrix2d_t *matrix, int nRows, int nCols, int nDepth);
 
 void matrixPrint(matrix2d_t *matrix);
 

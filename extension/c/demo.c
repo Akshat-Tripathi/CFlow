@@ -250,10 +250,10 @@ void trainMNIST() {
     // Flatten layer
     layer1->matrix->matrix2d = matrixFlatten(toMaxPool);
 
-    node_t *layer4 = denseLayer(layer1, 128, RELU, &entryPoints, &n);
+    node_t *layer2 = denseLayer(layer1, 128, RELU, &entryPoints, &n);
 
 
-    node_t *layer5 = denseLayer(layer4, 10, SIGMOID, &entryPoints, &n);
+    node_t *layer3 = denseLayer(layer2, 10, SIGMOID, &entryPoints, &n);
 
     // Output layer
     node_t *y = nodeInit("y", 1, 0, true);
@@ -262,7 +262,6 @@ void trainMNIST() {
     node_t **exitPoints = malloc(sizeof(node_t*));
     exitPoints[0] = y;
 
-    linkNodes(layer5, y);
     graph_t *network = graphInit("mnist", n, entryPoints, 1, exitPoints);
 
     // Convert labels into CFlow format
@@ -273,6 +272,8 @@ void trainMNIST() {
     matrix2d_t **targets = calloc(1, sizeof(matrix2d_t*));
     targets[0] = matrixTranspose(labelMTTransposed);
 
+    linkNodes(layer3, y);
+    //writeGraph(network);
     // Don't know if batch size of 100 is right
     train(network, inputs, targets, 0.1, 100, CSL, 100, SGD);
 }
@@ -362,7 +363,7 @@ int main(void) {
     free(inputs);*/
 
     //trainXOR();
-    //trainMNIST();
     trainMNISTSimple();
+    //trainMNIST();
     return EXIT_SUCCESS;
 }

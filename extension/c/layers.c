@@ -89,10 +89,10 @@ node_t *convolutionalLayer(node_t *x, int nChannels, int kernelSize,
     char *funcName = calloc(MAX_NODE_NAME_LENGTH + 1, sizeof(char));
 
     snprintf(kernelName, MAX_NODE_NAME_LENGTH, "KERNEL%d", nConvLayers);
-    snprintf(biasName, MAX_NODE_NAME_LENGTH, "KBIAS%d", nConvLayers);
+    snprintf(biasName, MAX_NODE_NAME_LENGTH, "CBIAS%d", nConvLayers);
     snprintf(convName, MAX_NODE_NAME_LENGTH, "CONV%d", nConvLayers);
-    snprintf(addName, MAX_NODE_NAME_LENGTH, "KADD%d", nConvLayers);
-    snprintf(funcName, MAX_NODE_NAME_LENGTH, "FUNC%d", nConvLayers++);
+    snprintf(addName, MAX_NODE_NAME_LENGTH, "CADD%d", nConvLayers);
+    snprintf(funcName, MAX_NODE_NAME_LENGTH, "CFUNC%d", nConvLayers++);
 
     node_t* kernel = nodeInit(kernelName, 0, 1, true);
     kernel->content.data->data->matrix2d = kernelMT;
@@ -109,7 +109,7 @@ node_t *convolutionalLayer(node_t *x, int nChannels, int kernelSize,
     node_t *activFunc = nodeInit(funcName, 1, 1, false);
     activFunc->content.operation = (operation_t) {.funcName = ACTIVATION, .activationName = activationFunction};
 
-    node_t *data = nodeInit("data", 0, 1, true);
+    node_t *data = nodeInit("config", 0, 1, true);
     data->content.data->data->matrix2d = matrixCreate(1, 2);
     matrixSet(data->content.data->data->matrix2d, 0, 0, stride);
     matrixSet(data->content.data->data->matrix2d, 0, 1, padding);

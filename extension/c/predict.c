@@ -110,6 +110,13 @@ void execute(node_t **nodes, int length, enum executionMode mode,
                 case TRANSPOSE:
                     node->matrix->matrix2d = matrixTranspose(node->inputs[0]->matrix->matrix2d);
                     break;
+                case FLATTEN:
+                    if (mode == FORWARD) {
+                        node->matrix->matrix2d = matrixFlatten(node->inputs[0]->matrix->matrix3d);
+                    } else {
+                        double *config = node->inputs[1]->matrix->matrix2d->data[0];
+                        node->matrix->matrix3d = matrixUnflatten(node->inputs[0]->matrix->matrix2d, config[0], config[1], config[2]);
+                    }
                 default:
                     printf("I haven't programmed that path in yet\n");
                     exit(EXIT_FAILURE); 
