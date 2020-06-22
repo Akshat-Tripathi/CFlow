@@ -10,8 +10,8 @@
 
 // PRE: A topological sort of the graph (reversed order) and it's length
 // POST: Each node's matrix value is set depending on the operation
-void execute(node_t **nodes, int length, enum executionMode mode, int nArgs,
-             void (*optimiser)(node_t *, int nArgs, ...), ...) {
+void execute(node_t **nodes, int length, enum executionMode mode,
+             void (*optimiser)(node_t *, int nArgs, ...), int nArgs, ...) {
 
     node_t *node;
     for (int i = length - 1; i >= 0; i--) {
