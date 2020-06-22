@@ -29,6 +29,7 @@ static char *encode(enum matrixFunction funcName) {
         case MULTIPLY:    sprintf(numStr, "%s%d", str, nMultiply++); break;
         case TRANSPOSE:   sprintf(numStr, "%s%d", str, nTranspose++); break;
         case CONVOLUTION: sprintf(numStr, "%s%d", str, nConv++); break;
+        default:          return NULL;
     }
     return numStr;
 }
