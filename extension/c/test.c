@@ -347,23 +347,67 @@ void testErrorFunctions() {
     printf("Testing Error Functions\n");
 
     //mean squared error test
-    double expected1[5] = {43.6, 44.4, 45.2, 46, 46.8};
-    double actual1[5] = {41, 45, 49, 47, 44};
-    assertOther((meanSquaredError(expected1, actual1, 5) - 6.08) < DOUBLE_COMPARISON);
+    matrix2d_t *expected1 = matrixCreate(5, 1);
+    matrixSet(expected1, 0, 0, 43.6); 
+    matrixSet(expected1, 1, 0, 44.4); 
+    matrixSet(expected1, 2, 0, 45.2); 
+    matrixSet(expected1, 3, 0, 46); 
+    matrixSet(expected1, 4, 0, 46.8); 
 
-    double expected2[10] = {75.4, 82.4, 28.1, 45.14, 45.3, 39.7, 85.1, 64.2, 25.7, 41.8};
-    double actual2[10] = {72, 84, 28, 41, 45, 32, 84, 65, 29, 44};
-    assertOther((meanSquaredError(expected2, actual2, 10) - 108.2296) < DOUBLE_COMPARISON);
+    matrix2d_t *actual1 = matrixCreate(5, 1);
+    matrixSet(actual1, 0, 0, 41); 
+    matrixSet(actual1, 1, 0, 45); 
+    matrixSet(actual1, 2, 0, 49); 
+    matrixSet(actual1, 3, 0, 47); 
+    matrixSet(actual1, 4, 0, 44); 
+    
+    assertOther((meanSquaredError(expected1, actual1) - 6.08) < DOUBLE_COMPARISON);
 
-    double expected3[10] = {75.4, 82.4, 28.1, 45.14, 45.3, 39.7, 85.1, 64.2, 25.7, 41.8};
-    double actual3[10] = {75, 82, 28, 45, 45, 39, 85, 64, 26, 42};
-    assertOther((meanSquaredError(expected3, actual3, 10) - 1.1096) < DOUBLE_COMPARISON);
+    matrix2d_t *expected2 = matrixCreate(10, 1);
+    matrixSet(expected2, 0, 0, 75.4); 
+    matrixSet(expected2, 1, 0, 82.4); 
+    matrixSet(expected2, 2, 0, 28.1); 
+    matrixSet(expected2, 3, 0, 45.14); 
+    matrixSet(expected2, 4, 0, 45.3);
+    matrixSet(expected2, 5, 0, 39.7); 
+    matrixSet(expected2, 6, 0, 85.1); 
+    matrixSet(expected2, 7, 0, 64.2); 
+    matrixSet(expected2, 8, 0, 25.7); 
+    matrixSet(expected2, 9, 0, 41.8);  
 
-    //cross entropy loss test
+    matrix2d_t *actual2 = matrixCreate(10, 1);
+    matrixSet(actual2, 0, 0, 72); 
+    matrixSet(actual2, 1, 0, 84); 
+    matrixSet(actual2, 2, 0, 28); 
+    matrixSet(actual2, 3, 0, 41); 
+    matrixSet(actual2, 4, 0, 45);
+    matrixSet(actual2, 5, 0, 32); 
+    matrixSet(actual2, 6, 0, 84); 
+    matrixSet(actual2, 7, 0, 65); 
+    matrixSet(actual2, 8, 0, 29); 
+    matrixSet(actual2, 9, 0, 44);  
+    
+    assertOther((meanSquaredError(expected2, actual2) - 108.2296) < DOUBLE_COMPARISON);
 
-    assertOther((crossEntropyLoss(expected1, actual1, 5) - (-1242.711)) / (-1242.711) < CROSS_ENTROPY_COMPARISON);
-    assertOther((crossEntropyLoss(expected2, actual2, 10) - (-3062.88)) / (-3062.88) < CROSS_ENTROPY_COMPARISON);
-    assertOther((crossEntropyLoss(expected3, actual3, 10) - (-3103.608)) / (-3103.608) < CROSS_ENTROPY_COMPARISON);
+    matrix2d_t *actual3 = matrixCreate(10, 1);
+    matrixSet(actual3, 0, 0, 75); 
+    matrixSet(actual3, 1, 0, 82); 
+    matrixSet(actual3, 2, 0, 28); 
+    matrixSet(actual3, 3, 0, 45); 
+    matrixSet(actual3, 4, 0, 45);
+    matrixSet(actual3, 5, 0, 39); 
+    matrixSet(actual3, 6, 0, 85); 
+    matrixSet(actual3, 7, 0, 64); 
+    matrixSet(actual3, 8, 0, 26); 
+    matrixSet(actual3, 9, 0, 42);  
+    
+    assertOther((meanSquaredError(expected2, actual3) - 1.1096) < DOUBLE_COMPARISON);
+
+    // //cross entropy loss test
+
+    assertOther((crossEntropyLoss(expected1, actual1) - (-1242.711)) / (-1242.711) < CROSS_ENTROPY_COMPARISON);
+    assertOther((crossEntropyLoss(expected2, actual2) - (-3062.88)) / (-3062.88) < CROSS_ENTROPY_COMPARISON);
+    assertOther((crossEntropyLoss(expected2, actual3) - (-3103.608)) / (-3103.608) < CROSS_ENTROPY_COMPARISON);
 
     printf("Finished testing error functions\n");
 }
@@ -774,22 +818,22 @@ void testReadCSV() {
 
 int main() {
     printf("Starting tests\n\n");
-    runTest(testActiveFuncs);
-    runTest(testMatrix);
-    runTest(testMatrixDotProduct);
-    runTest(testMatrixActiveFuncs);
-    runTest(testMatrixPooling);
-    runTest(testMatrixConvolution);
-    runTest(testMatrixDeconvolution);
-    //runTest(testMatrix3DConvolution);
-    runTest(testSingleMatrixFuncs);
+    // runTest(testActiveFuncs);
+    // runTest(testMatrix);
+    // runTest(testMatrixDotProduct);
+    // runTest(testMatrixActiveFuncs);
+    // runTest(testMatrixPooling);
+    // runTest(testMatrixConvolution);
+    // runTest(testMatrixDeconvolution);
+    // //runTest(testMatrix3DConvolution);
+    // runTest(testSingleMatrixFuncs);
 
-    runTest(testDataFile);
-    runTest(testGraph);
-    runTest(testScheduler);
+    // runTest(testDataFile);
+    // runTest(testGraph);
+    // runTest(testScheduler);
     runTest(testErrorFunctions);
-    runTest(testOptimisers);
-    runTest(testReadCSV);
+    // runTest(testOptimisers);
+    // runTest(testReadCSV);
     printf("%d out of %d tests pass!\n", testsRan - testsFailed, testsRan);
 
     return EXIT_SUCCESS;
