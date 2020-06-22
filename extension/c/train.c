@@ -67,7 +67,7 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
     
     va_list args;
 
-    double (*loss)(double*, double*, int);
+    double (*loss)(matrix2d_t*, matrix2d_t*);
     matrix2d_t *(*dLoss)(matrix2d_t*, matrix2d_t*);
 
     void (*opt)(node_t *weight, int nArgs, ...);
@@ -128,6 +128,7 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
             target = targets;
             input = inputs;
         }
+
         for (int j = 0; j < graph->n && inputIdx < nInputs; j++) {
             if (!graph->entryPoints[j]->content.data->internalNode) 
                 graph->entryPoints[j]->content.data->data->matrix2d = input[inputIdx++];
@@ -147,10 +148,12 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
             graphPoint = graph->exitPoints[j];
             lossPoint = lossPoints[j];
             lossPoint->content.data->data->matrix2d = 
-                dLoss(lossPoint->content.data->data->matrix2d, graphPoint->inputs[0]->matrix);
+                dLoss(lossPoint->content.data->data->matrix2d, graphPoint->inputs[0]->matrix->matrix2d);
             error = 0;
+            double temp;
             for (int k = 0; k < batchSize; k++) {
-                error += matrixGet(lossPoint->content.data->data->matrix2d, k, 0);
+                temp = matrixGet(lossPoint->content.data->data->matrix2d, k, 0);
+                error += temp * temp;
             }
             printf("Loss at epoch: %d is %lf\n", i, error / batchSize);
         }

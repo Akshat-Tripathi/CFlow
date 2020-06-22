@@ -29,6 +29,7 @@ static char *encode(enum matrixFunction funcName) {
         case MULTIPLY:    sprintf(numStr, "%s%d", str, nMultiply++); break;
         case TRANSPOSE:   sprintf(numStr, "%s%d", str, nTranspose++); break;
         case CONVOLUTION: sprintf(numStr, "%s%d", str, nConv++); break;
+        default:          return NULL;
     }
     return numStr;
 }
@@ -146,8 +147,8 @@ node_t *_differentiate(node_t *node, node_t ***lossPoints, int *nLoss) {
                 //Dilate the derivative when finding dA
                 node_t conv = *derivative->outputs[1];
                 //dPadding = Padding - 1; dStride = Stride
-                matrix2d_t *args = conv.inputs[2]->matrix;
-                matrixSet(args, 0, 1, matrixGet(node->inputs[2]->matrix, 0, 1) - 1);
+                matrix2d_t *args = conv.inputs[2]->matrix->matrix2d;
+                matrixSet(args, 0, 1, matrixGet(node->inputs[2]->matrix->matrix2d, 0, 1) - 1);
                 matrixSet(args, 0, 0, 1);
 
                 //0th input is the matrix to be dilated, args are in the 1st input
@@ -155,10 +156,10 @@ node_t *_differentiate(node_t *node, node_t ***lossPoints, int *nLoss) {
                 dilate->content.operation.funcName = DILATE;
 
                 dilate->outputs[0] = &conv;
-                matrixSet(dilate->inputs[1]->matrix, 0, 0, matrixGet(node->inputs[2]->matrix, 0, 0) - 1);
+                matrixSet(dilate->inputs[1]->matrix->matrix2d, 0, 0, matrixGet(node->inputs[2]->matrix->matrix2d, 0, 0) - 1);
 
                 derivative->outputs[1] = dilate;
-                matrix2d_t *mat = derivative->outputs[0]->inputs[2]->matrix;
+                matrix2d_t *mat = derivative->outputs[0]->inputs[2]->matrix->matrix2d;
                 
                 //1 stride 0 padding
                 matrixSet(mat, 0, 0, 1);

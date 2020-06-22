@@ -175,7 +175,7 @@ void trainXOR(void) {
 
     int batchSize = 4;
     
-    x->matrix = matrixCreate(batchSize, 2);
+    x->matrix->matrix2d = matrixCreate(batchSize, 2);
 
     node_t **entryPoints = NULL;
     int n = 0;
@@ -240,7 +240,7 @@ void trainMNIST() {
 
 int main(void) {
 
-    graph_t *graphOne = genGraphOne();
+    /*graph_t *graphOne = genGraphOne();
     graphFileWrite("DAG_1_SAVE", graphOne);
     graph_t *graphOneRead = graphFileRead("DAG_1_SAVE");
     writeGraph(graphOneRead);
@@ -269,7 +269,7 @@ int main(void) {
 
     lstm = LSTM(inputs, 2, SIGMOID, 5);
     writeGraph(compile(lstm, "lstmDiff"));
-    free(inputs);
+    free(inputs);*/
 
     trainXOR();
 
