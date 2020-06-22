@@ -11,7 +11,7 @@ enum executionMode {
     UPDATE
 };
 
-void execute(node_t **nodes, int length, enum executionMode mode, int nArgs,
-    void (*optimiser)(node_t *weight, int nArgs, ...), ...);
+void execute(node_t **nodes, int length, enum executionMode mode, 
+    void (*optimiser)(node_t *weight, int nArgs, ...), int nArgs, ...);
 
 #endif
