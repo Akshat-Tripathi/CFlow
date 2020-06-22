@@ -9,6 +9,7 @@
 #include "../file.h"
 #include "../error.h"
 #include "../optimisers.h"
+#include "../readCSV.h"
 #include "../testUtils.h"
 #include "../train.h"
 #include "../util.h"
