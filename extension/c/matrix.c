@@ -473,13 +473,13 @@ matrix2d_t *matrixFlatten(matrix3d_t *matrix) {
     return flattened;
 }
 
-matrix3d_t *matrixUnflatten(matrix2d_t *matrix, double* dimensions) {
-    matrix3d_t *unflattened = matrix3DCreate(dimensions[0], dimensions[1], dimensions[2]);
+matrix3d_t *matrixUnflatten(matrix2d_t *matrix, int nRows, int nCols, int nDepth) {
+    matrix3d_t *unflattened = matrix3DCreate(nRows, nCols, nDepth);
 
-    for (int i = 0; i < unflattened->nRows; i++) {
-        for (int j = 0; j < unflattened->nCols; j++) {
-            for (int k = 0; k < unflattened->nDepth; k++) {
-                unflattened->data[i][j][k] = matrixGet(matrix, (i * unflattened->nRows) + (j * unflattened->nCols) + k, 0);
+    for (int i = 0; i < nRows; i++) {
+        for (int j = 0; j < nCols; j++) {
+            for (int k = 0; k < nDepth; k++) {
+                unflattened->data[i][j][k] = matrixGet(matrix, (i * nRows) + (j * nCols) + k, 0);
             }
         }
     }

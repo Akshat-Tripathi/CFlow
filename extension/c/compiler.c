@@ -70,7 +70,7 @@ node_t *clone(node_t *node) {
 
 node_t *_productRule(node_t *deltaNode, node_t *forwardNode, enum matrixFunction funcName, node_t ***lossPoints, int *nLoss) {
     push(lossPoints, nLoss, deltaNode);
-    node_t *op = nodeInit(encode(funcName), 2, 1, false);
+    node_t *op = nodeInit(encode(funcName), funcName == CONVOLUTION ? 3 : 2, 1, false);
     op->content.operation.funcName = funcName;
     forwardNode->outputs[0] = op;
     linkDeriv(op, _differentiate(deltaNode, lossPoints, nLoss));
@@ -141,11 +141,15 @@ node_t *_differentiate(node_t *node, node_t ***lossPoints, int *nLoss) {
                 {node_t *k = clone(node->inputs[1]);
                 node_t *rotate = nodeInit("rotate", 1, 1, false);
                 k->outputs[0] = rotate;
+                rotate->inputs[0] = k;
+
+                rotate->content.operation.funcName = ROTATE;
 
                 derivative = productRule(clone(node->inputs[0]), rotate, CONVOLUTION, lossPoints, nLoss);
 
                 //Dilate the derivative when finding dA
                 node_t conv = *derivative->outputs[1];
+                conv.inputs[2] = nodeInit("config", 0, 1, true);
                 //dPadding = Padding - 1; dStride = Stride
                 matrix2d_t *args = conv.inputs[2]->matrix->matrix2d;
                 matrixSet(args, 0, 1, matrixGet(node->inputs[2]->matrix->matrix2d, 0, 1) - 1);
