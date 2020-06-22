@@ -68,19 +68,19 @@ graph_t *genGraphTwo() {
     matrix2d_t *matrix = matrixCreate(20, 10);
 
     node_t *A = nodeInit("A", 0, 1, true);
-    A->content.data->data->matrix2d = *matrix;
+    A->content.data->data->matrix2d = matrix;
     node_t *B = nodeInit("B", 1, 3, true);
-    B->content.data->data->matrix2d = *matrix;
+    B->content.data->data->matrix2d = matrix;
     node_t *C = nodeInit("C", 1, 1, true);
-    C->content.data->data->matrix2d = *matrix;
+    C->content.data->data->matrix2d = matrix;
     node_t *D = nodeInit("D", 2, 1, true);
-    D->content.data->data->matrix2d = *matrix;
+    D->content.data->data->matrix2d = matrix;
     node_t *E = nodeInit("E", 3, 1, true);
-    E->content.data->data->matrix2d = *matrix;
+    E->content.data->data->matrix2d = matrix;
     node_t *F = nodeInit("F", 1, 0, true);
-    F->content.data->data->matrix2d = *matrix;
+    F->content.data->data->matrix2d = matrix;
     node_t *G = nodeInit("G", 0, 1, true);
-    G->content.data->data->matrix2d = *matrix;
+    G->content.data->data->matrix2d = matrix;
 
     linkNodes(A, B);
     linkNodes(G, D);
@@ -106,21 +106,21 @@ graph_t *genGraphThree() {
     matrix2d_t *matrix = matrixCreate(20, 10);
 
     node_t *n5 = nodeInit("5", 0, 1, true);
-    n5->content.data->data->matrix2d = *matrix;
+    n5->content.data->data->matrix2d = matrix;
     node_t *n7 = nodeInit("7", 0, 2, true);
-    n7->content.data->data->matrix2d = *matrix;
+    n7->content.data->data->matrix2d = matrix;
     node_t *n3 = nodeInit("3", 0, 2, true);
-    n3->content.data->data->matrix2d = *matrix;
+    n3->content.data->data->matrix2d = matrix;
     node_t *n11 = nodeInit("11", 2, 3, true);
-    n11->content.data->data->matrix2d = *matrix;
+    n11->content.data->data->matrix2d = matrix;
     node_t *n8 = nodeInit("8", 2, 1, true);
-    n8->content.data->data->matrix2d = *matrix;
+    n8->content.data->data->matrix2d = matrix;
     node_t *n2 = nodeInit("2", 1, 0, true);
-    n2->content.data->data->matrix2d = *matrix;
+    n2->content.data->data->matrix2d = matrix;
     node_t *n9 = nodeInit("9", 2, 0, true);
-    n9->content.data->data->matrix2d = *matrix;
+    n9->content.data->data->matrix2d = matrix;
     node_t *n10 = nodeInit("10", 2, 0, true);
-    n10->content.data->data->matrix2d = *matrix;
+    n10->content.data->data->matrix2d = matrix;
 
     linkNodes(n5, n11);
     linkNodes(n7, n11);
@@ -243,5 +243,5 @@ int main(void) {
 
     trainXOR();
 
-    return EXIT_SUCCESS; 
+    return EXIT_SUCCESS;
 }

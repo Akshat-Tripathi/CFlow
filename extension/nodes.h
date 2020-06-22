@@ -14,8 +14,8 @@ typedef struct operation {
 } operation_t;
 
 typedef union {
-	matrix2d_t matrix2d;
-	matrix3d_t matrix3d;
+	matrix2d_t *matrix2d;
+	matrix3d_t *matrix3d;
 } matrix_t;
 
 typedef struct data {

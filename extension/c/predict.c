@@ -39,7 +39,7 @@ void execute(node_t **nodes, int length, enum executionMode mode, int nArgs,
             case UPDATE:
                 if (node->content.data->internalNode && 'd' == *(node->name)) {
                     free(node->content.data->data);
-                    node->content.data->data = matrixClone(node->matrix);
+                    node->content.data->data->matrix2d = matrixClone(node->matrix);
                     free(node->matrix);
                 }
             }
@@ -115,10 +115,10 @@ void execute(node_t **nodes, int length, enum executionMode mode, int nArgs,
                     exit(EXIT_FAILURE); 
             }
         }
-        /*if (BACKWARD == mode) {
+        //if (BACKWARD == mode) {
             printf("%s\n", node->name);
-            if (node->matrix) printMatrix(node->matrix);
+            if (node->matrix) if(node->matrix->data) printMatrix(node->matrix);
             printf("\n\n");
-        }*/
+        //}
     }
 }

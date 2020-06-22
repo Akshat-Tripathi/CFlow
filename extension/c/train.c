@@ -122,14 +122,19 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
 
     for (int i = 0; i < epochs; i++) {
         //Prime graphs with data
-        target = sample(inputs, targets, batchSize, &input, nInputs, nTargets);
+        if (batchSize < nInputs) {
+            target = sample(inputs, targets, batchSize, &input, nInputs, nTargets);
+        } else {
+            target = targets[0];
+            input = inputs[0];
+        }
         for (int j = 0; j < graph->n && inputIdx < nInputs; j++) {
             if (!graph->entryPoints[j]->content.data->internalNode) 
-                graph->entryPoints[j]->content.data->data->matrix2d = *(input[inputIdx++]);
+                graph->entryPoints[j]->content.data->data->matrix2d = input[inputIdx++];
         }
 
         for (int j = 0; j < nTargets; j++) {
-            lossPoints[j]->content.data->data->matrix2d = *(target[j]);
+            lossPoints[j]->content.data->data->matrix2d = target[j];
         }
 
         execute(forward, nNodesForward, FORWARD, 0, NULL);
@@ -142,7 +147,7 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
             graphPoint = graph->exitPoints[j];
             lossPoint = lossPoints[j];
             lossPoint->content.data->data->matrix2d = 
-                *dLoss(&(lossPoint->content.data->data->matrix2d), graphPoint->inputs[0]->matrix);
+                dLoss(&(lossPoint->content.data->data->matrix2d), graphPoint->inputs[0]->matrix);
             error = 0;
             for (int k = 0; k < batchSize; k++) {
                 error += matrixGet(&(lossPoint->content.data->data->matrix2d), k, 0);
