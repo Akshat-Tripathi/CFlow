@@ -113,7 +113,7 @@ char** encodeGraph(graph_t* graph, char*** linkSection, int* nNodeLines, int* nL
     FILE* dataFile = fopen(dataFilename, "a");
     append(&lines, &nLines, dataFilename);
 
-    char** visited = NULL;
+    node_t** visited = NULL;
     int nVisited = 0;
 
     node_t** stack = malloc(graph->n * sizeof(node_t*));
@@ -131,9 +131,9 @@ char** encodeGraph(graph_t* graph, char*** linkSection, int* nNodeLines, int* nL
     while (stackSize) {
         node = popFirst(&stack, &stackSize);
         // printf("Name: %s\n", node->name);
-        if (!contains(visited, nVisited, node->name)) {
+        if (!contains(visited, nVisited, node)) {
             char* encoded = encodeNode(node, dataFile, &linkLines, &linksCreated);
-            append(&visited, &nVisited, node->name);
+            push(&visited, &nVisited, node);
             append(&lines, &nLines, encoded);
 
             for (int i = 0; i < node->m; i++) {

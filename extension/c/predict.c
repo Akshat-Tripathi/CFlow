@@ -13,27 +13,25 @@
 void execute(node_t **nodes, int length, enum executionMode mode, int nArgs,
              void (*optimiser)(node_t *, int nArgs, ...), ...) {
 
-    va_list args;
-
     node_t *node;
     for (int i = length - 1; i >= 0; i--) {
         node = nodes[i];
         if (node->isData) {
             switch (mode) {
             case FORWARD:
-                node->matrix = matrixClone(node->content.data->data);
+                node->matrix = matrixClone(node->content.data->data->matrix2d);
                 break;
             case BACKWARD:
                 if (node->content.data->internalNode) {
                     if (node->matrix) free(node->matrix);
-                    node->matrix = matrixClone(node->content.data->data);
+                    node->matrix = matrixClone(node->content.data->data->matrix2d);
                     for (int j = 0; j < node->n; j++) {
                         node->matrix = matrixAdd(node->matrix, 
                                                  node->inputs[j]->matrix);
                         //optimiser(node, nArgs, args);
                     }
                 } else {
-                   node->matrix = matrixClone(node->content.data->data); 
+                   node->matrix = matrixClone(node->content.data->data->matrix2d); 
                 }
                 break;
             case UPDATE:
