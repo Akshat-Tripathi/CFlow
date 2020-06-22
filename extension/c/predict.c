@@ -47,7 +47,7 @@ void execute(node_t **nodes, int length, enum executionMode mode,
             switch (node->content.operation.funcName) {
                 case CONVOLUTION:
                     //stride and padding are stored in a 2 X 1 matrix
-                    node->matrix = matrixConvolution(node->inputs[0]->matrix, node->inputs[1]->matrix,
+                    node->matrix = matrix3DConvolution(node->inputs[0]->matrix, node->inputs[1]->matrix,
                     matrixGet(node->inputs[2]->matrix, 0, 0), matrixGet(node->inputs[2]->matrix, 0, 1));
                     break;
                 case DECONVOLUTION:
