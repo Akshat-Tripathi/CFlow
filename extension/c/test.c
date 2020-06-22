@@ -465,8 +465,8 @@ void testOptimisers() {
     matrix2d_t *newWeights = matrixSubtract(weights1, matrixScalarProduct(test1->matrix, lRate));
 
     sgd(test1, 1, lRate);
-    for (int i = 0; i < test1->matrix->nRows; i++) {
-        for (int j = 0; j < test1->matrix->nCols; j++) {
+    for (int i = 0; i < test1->matrix->matrix2d->nRows; i++) {
+        for (int j = 0; j < test1->matrix->matrix2d->nCols; j++) {
             assertEqual(matrixGet(&(test1->content.data->data->matrix2d), i, j),
                         matrixGet(newWeights, i, j));
         }
