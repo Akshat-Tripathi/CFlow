@@ -9,16 +9,13 @@
 #include "../matrix.h"
 enum activationFunction getDeriv(enum activationFunction func) {
     switch (func) {
-        case LRELU:
-            return LRELU_PRIME;
-        case LINEAR:
-            return LINEAR_PRIME;
-        case RELU:
-            return RELU_PRIME;
-        case TANH:
-            return TANH_PRIME;
-        case SIGMOID:
-            return SIGMOID_PRIME;
+
+        case LRELU:   return LRELU_PRIME;
+        case LINEAR:  return LINEAR_PRIME;
+        case RELU: 	  return RELU_PRIME;
+        case TANH:    return TANH_PRIME;
+        case SIGMOID: return SIGMOID_PRIME;
+        default:      return -1;
     }
 }
 #define ALPHA 0.2
@@ -55,7 +52,7 @@ double sigmoid(double x) {
 }
 
 double sigmoidPrime(double x) {
-    return sigmoid(x) * (1 - sigmoid(x));
+    return x * (1 - x);
     //Return statements are equivalent, but second return statement exceeds double size limit
     //return exp(x) / ((exp(x) + 1) * (exp(x) + 1));
 }

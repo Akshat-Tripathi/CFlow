@@ -9,6 +9,7 @@
 #include "../file.h"
 #include "../error.h"
 #include "../optimisers.h"
+#include "../readCSV.h"
 #include "../testUtils.h"
 #include "../train.h"
 #include "../util.h"
@@ -174,7 +175,7 @@ void trainXOR(void) {
 
     int batchSize = 4;
     
-    x->matrix = matrixCreate(batchSize, 2);
+    x->matrix->matrix2d = matrixCreate(batchSize, 2);
 
     node_t **entryPoints = NULL;
     int n = 0;
@@ -208,9 +209,38 @@ void trainXOR(void) {
 
 }
 
+void trainMNIST() {
+    node_t *x = nodeInit("x", 0, 1, true);
+    x->content.data->internalNode = false;
+
+    int nInstances = 60000;
+
+    x->matrix = matrix3DCreate(nInstances, 28, 28);
+    csvDataPack_t trainingData = readCSV("data/mnist_train.csv", "r");
+    matrix2d_t** matrixData = trainingData.matrixInputs;
+    for (int i = 0; i < nInstances; i++) {
+        x->matrix[i].data = matrixData[i]->data;
+    }
+
+
+    node_t **entryPoints = NULL;
+    int n = 0;
+
+    push(&entryPoints, &n, x);
+
+    node_t *layer1 = convolutionalLayer(x, 1, 3, 32, RELU, 1, 0, &entryPoints, &n);
+
+    matrix3d_t* gradientOnes = NULL;
+    matrix2d_t* maxPooled = matrixMaxPooling(layer1->matrix, gradientOnes, 1, 2);
+
+    //double* flattened = calloc(maxPooled->, sizeof(double));
+
+    // node_t *layer4 = denseLayer()
+}
+
 int main(void) {
 
-    graph_t *graphOne = genGraphOne();
+    /*graph_t *graphOne = genGraphOne();
     graphFileWrite("DAG_1_SAVE", graphOne);
     graph_t *graphOneRead = graphFileRead("DAG_1_SAVE");
     writeGraph(graphOneRead);
@@ -239,7 +269,7 @@ int main(void) {
 
     lstm = LSTM(inputs, 2, SIGMOID, 5);
     writeGraph(compile(lstm, "lstmDiff"));
-    free(inputs);
+    free(inputs);*/
 
     trainXOR();
 

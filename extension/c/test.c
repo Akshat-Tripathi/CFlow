@@ -30,7 +30,16 @@ int testsFailed = 0;
     do {                                                                                     \
         assertsRan++;                                                                        \
         if ((a) != (b)) {                                                                    \
-            printf("%s(line %d): got: %lf | expected: %lf\n", __func__, __LINE__, (a), (b)); \
+            printf("%s(line %d): got: %lf | expected: %lf\n", __func__, __LINE__, (double) (a), (double) (b)); \
+            assertsFailed++;                                                                 \
+        }                                                                                    \
+    } while (0)
+
+#define assertEqualPtr(a, b)                                                                    \
+    do {                                                                                     \
+        assertsRan++;                                                                        \
+        if ((a) != (b)) {                                                                    \
+            printf("%s(line %d): got: %p | expected: %p\n", __func__, __LINE__, (void *) (a), (void *) (b)); \
             assertsFailed++;                                                                 \
         }                                                                                    \
     } while (0)
@@ -305,13 +314,13 @@ void testScheduler() {
     int nodeArrSize = 0;
     node_t **nodeArr = schedule(newGraph, &nodeArrSize);
 
-    assertEqual(nodeArr[6], G);
-    assertEqual(nodeArr[5], A);
-    assertEqual(nodeArr[4], B);
-    assertEqual(nodeArr[3], D);
-    assertEqual(nodeArr[2], C);
-    assertEqual(nodeArr[1], E);
-    assertEqual(nodeArr[0], F);
+    assertEqualPtr(nodeArr[6], G);
+    assertEqualPtr(nodeArr[5], A);
+    assertEqualPtr(nodeArr[4], B);
+    assertEqualPtr(nodeArr[3], D);
+    assertEqualPtr(nodeArr[2], C);
+    assertEqualPtr(nodeArr[1], E);
+    assertEqualPtr(nodeArr[0], F);
     assertEqual(nodeArrSize, 7);
 
     printf("%s\n", "Finished testing scheduler");
