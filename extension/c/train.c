@@ -67,7 +67,7 @@ void train(graph_t *graph, matrix2d_t **inputs, matrix2d_t **targets,
     
     va_list args;
 
-    double (*loss)(double*, double*, int);
+    double (*loss)(matrix2d_t*, matrix2d_t*);
     matrix2d_t *(*dLoss)(matrix2d_t*, matrix2d_t*);
 
     void (*opt)(node_t *weight, int nArgs, ...);

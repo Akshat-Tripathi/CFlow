@@ -12,6 +12,7 @@ enum activationFunction getDeriv(enum activationFunction func) {
         case RELU: 	  return RELU_PRIME;
         case TANH:    return TANH_PRIME;
         case SIGMOID: return SIGMOID_PRIME;
+        default:      return -1;
     }
 }
 #define ALPHA 0.2

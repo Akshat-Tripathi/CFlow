@@ -29,6 +29,7 @@ static char *encode(enum matrixFunction funcName) {
         case MULTIPLY:    sprintf(numStr, "%s%d", str, nMultiply++); break;
         case TRANSPOSE:   sprintf(numStr, "%s%d", str, nTranspose++); break;
         case CONVOLUTION: sprintf(numStr, "%s%d", str, nConv++); break;
+        default:          return NULL;
     }
     return numStr;
 }
@@ -218,12 +219,12 @@ node_t *insertNoOp(node_t *node, int outputIdx) {
 
 //PRE: node doesn't have 1 output
 //POST:
-void *_compile(node_t *node, node_t ***compiled, int *nCompiled, node_t ***lossPoints, int *nLoss) {
+void _compile(node_t *node, node_t ***compiled, int *nCompiled, node_t ***lossPoints, int *nLoss) {
     node_t *diff;
     if (!contains(*compiled, *nCompiled, node)) {
         if (strcmp("noop", node->name)) push(compiled, nCompiled, node);
         if (1 == node->m) {
-            return _compile(node->outputs[0], compiled, nCompiled, lossPoints, nLoss);
+            _compile(node->outputs[0], compiled, nCompiled, lossPoints, nLoss);
         } else if (!node->m) {
             diff = differentiate(node, lossPoints, nLoss);
             push(lossPoints, nLoss, diff);

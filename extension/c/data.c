@@ -51,7 +51,7 @@ static data_t *readBlock(FILE *file) {
     // seek(file, &cRows);
     // seek(file, &cCols);
 
-    char *name = seek(file);
+    seek(file);
     char *cRows = seek(file);
     char *cCols = seek(file);
     int rows = atoi(cRows);
@@ -62,6 +62,7 @@ static data_t *readBlock(FILE *file) {
     }
 
     data_t *data = malloc(sizeof(data_t));
+    data->data = malloc(sizeof(matrix_t));
     data->internalNode = true;
     data->data->matrix2d = matrix;
     return data;
