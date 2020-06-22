@@ -21,7 +21,7 @@ data_t *initData(bool internalNode, matrix2d_t matrix) {
     data_t *data = malloc(sizeof(data_t));
 	data->data = malloc(sizeof(matrix_t));
     data->internalNode = internalNode;
-    data->data->matrix2d = matrix;
+    data->data->matrix2d = &matrix;
     return data;
 }
 
@@ -41,19 +41,19 @@ graph_t *genGraph(void) {
     matrixRandomise(matrix);
 
     node_t *a = nodeInit("A", 0, 1, true);
-    a->content.data->data->matrix2d = *matrix;
+    a->content.data->data->matrix2d = matrix;
     node_t *b = nodeInit("B", 0, 1, true);
-    b->content.data->data->matrix2d = *matrix;
+    b->content.data->data->matrix2d = matrix;
     node_t *c = nodeInit("C", 0, 2, true);
-    c->content.data->data->matrix2d = *matrix;
+    c->content.data->data->matrix2d = matrix;
     node_t *d = nodeInit("D", 2, 2, true);
-    d->content.data->data->matrix2d = *matrix;
+    d->content.data->data->matrix2d = matrix;
     node_t *e = nodeInit("E", 1, 0, true);
-    e->content.data->data->matrix2d = *matrix;
+    e->content.data->data->matrix2d = matrix;
     node_t *f = nodeInit("F", 2, 0, true);
-    f->content.data->data->matrix2d = *matrix;
+    f->content.data->data->matrix2d = matrix;
     node_t *g = nodeInit("G", 1, 0, true);
-    g->content.data->data->matrix2d = *matrix;
+    g->content.data->data->matrix2d = matrix;
 
     linkNodes(a, d);
     linkNodes(b, d);
@@ -100,11 +100,11 @@ bool dataAreEqual(data_t *data1, data_t *data2) {
     assert(data1);
     assert(data2);
     if (data1->internalNode == data2->internalNode) {
-        if (data1->data->matrix2d.nRows == data2->data->matrix2d.nRows &&
-            data1->data->matrix2d.nCols == data2->data->matrix2d.nCols) {
-            for (int i = 0; i < data1->data->matrix2d.nRows; i++) {
-                for (int j = 0; j < data1->data->matrix2d.nCols; j++) {
-                    if (matrixGet(&(data1->data->matrix2d), i, j) != matrixGet(&(data2->data->matrix2d), i, j)) {
+        if (data1->data->matrix2d->nRows == data2->data->matrix2d->nRows &&
+            data1->data->matrix2d->nCols == data2->data->matrix2d->nCols) {
+            for (int i = 0; i < data1->data->matrix2d->nRows; i++) {
+                for (int j = 0; j < data1->data->matrix2d->nCols; j++) {
+                    if (matrixGet((data1->data->matrix2d), i, j) != matrixGet((data2->data->matrix2d), i, j)) {
                         return false;
                     }
                 }
@@ -122,7 +122,7 @@ graph_t *genDoubleAdd(void) {
     node_t *add1 = nodeInit("add1", 2, 1, false);
 
     x->outputs[0] = x->outputs[1] = add;
-    x->content.data->data->matrix2d = *(matrixCreate(3, 4));
+    x->content.data->data->matrix2d = matrixCreate(3, 4);
     add->inputs[0] = add->inputs[1] = x;
 
     add->outputs[0] = add->outputs[1] = add1;
