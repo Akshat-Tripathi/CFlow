@@ -36,9 +36,9 @@ typedef struct node {
     struct node **inputs;
     struct node **outputs;
     int inputIdx, outputIdx;
-    matrix2d_t *matrix;
-    matrix2d_t *optimiserMatrix; //Used for storing velocities/gradient accumalations
-    matrix2d_t *poolingMatrixGrad;
+    matrix_t *matrix;
+    matrix_t *optimiserMatrix; //Used for storing velocities/gradient accumalations
+    matrix_t *poolingMatrixGrad;
 } node_t;
 
 //PRE: All graphs are acyclic

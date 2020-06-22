@@ -12,7 +12,7 @@ node_t *nodeInit(char *name, int numInputs, int numOutputs, bool isData) {
     newNode->outputIdx = 0;
     newNode->n = numInputs;
     newNode->m = numOutputs;
-    newNode->matrix = NULL;
+    newNode->matrix = malloc(sizeof(matrix_t));
     newNode->optimiserMatrix = NULL;
 
     if (isData) {
@@ -33,10 +33,10 @@ void freeNode(node_t *root) {
 
     if (root->n) free(root->inputs);
     if (root->m) free(root->outputs);
-    if (root->matrix)
-        matrixFree(root->matrix);
-    if (root->optimiserMatrix)
-        matrixFree(root->optimiserMatrix);
+    if (root->matrix->matrix2d)
+        matrixFree(root->matrix->matrix2d);
+    if (root->optimiserMatrix->matrix2d)
+        matrixFree(root->optimiserMatrix->matrix2d);
     free(root);
 }
 

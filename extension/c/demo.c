@@ -174,7 +174,7 @@ void trainXOR(void) {
 
     int batchSize = 4;
     
-    x->matrix = matrixCreate(batchSize, 2);
+    x->matrix->matrix2d = matrixCreate(batchSize, 2);
 
     node_t **entryPoints = NULL;
     int n = 0;
