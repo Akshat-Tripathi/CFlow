@@ -40,10 +40,10 @@ node_t *denseLayer(node_t *x, int nNeurons,
     snprintf(funcName, MAX_NODE_NAME_LENGTH, "FUNC%d", nDense++);
 
     node_t* weight = nodeInit(weightName, 0, 1, true);
-    weight->content.data->data = weightMT;
+    weight->content.data->data->matrix2d = weightMT;
 
     node_t* bias = nodeInit(biasName, 0, 1, true);
-    bias->content.data->data = biasMT;
+    bias->content.data->data->matrix2d = biasMT;
 
     node_t *dotProduct = nodeInit(dotName, 2, 1, false);
     dotProduct->content.operation = (operation_t) {.funcName = DOT};
@@ -95,10 +95,10 @@ node_t *convolutionalLayer(node_t *x, int nChannels, int kernelSize,
     snprintf(funcName, MAX_NODE_NAME_LENGTH, "FUNC%d", nConvLayers++);
 
     node_t* kernel = nodeInit(kernelName, 0, 1, true);
-    kernel->content.data->data = kernelMT;
+    kernel->content.data->data->matrix2d = kernelMT;
 
     node_t* bias = nodeInit(biasName, 0, 1, true);
-    bias->content.data->data = biasMT;
+    bias->content.data->data->matrix2d = biasMT;
 
     node_t *conv = nodeInit(convName, 3, 1, false);
     conv->content.operation = (operation_t) {.funcName = CONVOLUTION};
@@ -110,9 +110,9 @@ node_t *convolutionalLayer(node_t *x, int nChannels, int kernelSize,
     activFunc->content.operation = (operation_t) {.funcName = ACTIVATION, .activationName = activationFunction};
 
     node_t *data = nodeInit("data", 0, 1, true);
-    data->content.data->data = matrixCreate(1, 2);
-    matrixSet(data->content.data->data, 0, 0, stride);
-    matrixSet(data->content.data->data, 0, 1, padding);
+    data->content.data->data->matrix2d = matrixCreate(1, 2);
+    matrixSet(data->content.data->data->matrix2d, 0, 0, stride);
+    matrixSet(data->content.data->data->matrix2d, 0, 1, padding);
 
     linkNodes(x, conv);
     linkNodes(kernel, conv);
@@ -141,7 +141,7 @@ static node_t *LSTMGate(node_t *x, node_t *prevOutput,
     //activationFunction(dot(x, W) + dot(prev, U) + b)
 
     int nNeurons  = prevOutput->matrix->nCols;
-    int batchSize = prevOutput->matrix->nRows;
+    //int batchSize = prevOutput->matrix->nRows;
 
     matrix2d_t *weightMTW = generateRandMatrix(x->matrix->nCols, nNeurons);
     matrix2d_t *weightMTU = generateRandMatrix(nNeurons, nNeurons);
@@ -166,13 +166,13 @@ static node_t *LSTMGate(node_t *x, node_t *prevOutput,
     snprintf(gateName, MAX_NODE_NAME_LENGTH, "FUNC%d", nGates++);
 
     node_t *weightW = nodeInit(weightWName, 0, 1, true);
-    weightW->content.data->data = weightMTW;
+    weightW->content.data->data->matrix2d = weightMTW;
 
     node_t *weightU = nodeInit(weightUName, 0, 1, true);
-    weightU->content.data->data = weightMTU;
+    weightU->content.data->data->matrix2d = weightMTU;
 
     node_t *bias = nodeInit(biasName, 0, 1, true);
-    bias->content.data->data = biasMT;
+    bias->content.data->data->matrix2d = biasMT;
 
     node_t *dotProductW = nodeInit(dotWName, 2, 1, false);
     dotProductW->content.operation = (operation_t) {.funcName = DOT};
@@ -313,13 +313,13 @@ graph_t *LSTM(node_t **inputs, int timeSteps, enum activationFunction func, int 
 
     node_t *prevOutput = nodeInit("OUTPUT", 0, 4, true);
     prevOutput->matrix = matrixCreate(inputs[0]->matrix->nRows, nNeurons);
-    prevOutput->content.data->data = prevOutput->matrix;
+    prevOutput->content.data->data->matrix2d = prevOutput->matrix;
     
 
 
     node_t *prevState = nodeInit("STATE", 0, 1, true);
     prevState->matrix = matrixCreate(inputs[0]->matrix->nRows, nNeurons);
-    prevState->content.data->data = prevState->matrix;
+    prevState->content.data->data->matrix2d = prevState->matrix;
     
     node_t *nextState;
 
