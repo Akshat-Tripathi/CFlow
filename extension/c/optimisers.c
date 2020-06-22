@@ -17,7 +17,7 @@ void sgd(node_t *weight, int nArgs, ...) {
 
     matrix2d_t *newWeights = matrixSubtract(&(weight->content.data->data->matrix2d), 
                                             matrixScalarProduct(weight->matrix, lRate));
-    weight->content.data->data->matrix2d = *newWeights;
+    weight->content.data->data->matrix2d = newWeights;
 }
 
 //PRE: Node containing weight matrix stored in node->content->data, gradients stored in node->matrix,
@@ -37,7 +37,7 @@ void sgdMomentum(node_t *weight, int nArgs, ...) {
                                              matrixScalarProduct(weight->matrix, lRate));
     matrix2d_t *newWeight = matrixAdd(&(weight->content.data->data->matrix2d), newVelocity);
 
-    weight->content.data->data->matrix2d = *newWeight;
+    weight->content.data->data->matrix2d = newWeight;
     matrixFree(weight->optimiserMatrix);
     weight->optimiserMatrix = newVelocity;
 }
@@ -73,7 +73,7 @@ void adagrad(node_t *weight, int nArgs, ...) {
     matrix2d_t *constant = matrixScalarProduct(matrixElementWise(denomConstant, inverse), lRate);
     matrix2d_t *newWeight = matrixSubtract(&(weight->content.data->data->matrix2d), 
                                          matrixMultiplyElementWise(constant, weight->matrix));
-    weight->content.data->data->matrix2d = *newWeight;
+    weight->content.data->data->matrix2d = newWeight;
     matrixFree(weight->optimiserMatrix);
     weight->optimiserMatrix = newR;
     matrixFree(denomConstant);
@@ -107,7 +107,7 @@ void RMSProp(node_t *weight, int nArgs, ...) {
     matrix2d_t *constant = matrixScalarProduct(matrixElementWise(denomConstant, inverse), lRate);
     matrix2d_t *newWeight = matrixSubtract(&(weight->content.data->data->matrix2d), 
                                          matrixMultiplyElementWise(constant, weight->matrix));
-    weight->content.data->data->matrix2d = *newWeight;
+    weight->content.data->data->matrix2d = newWeight;
     matrixFree(weight->optimiserMatrix);
     weight->optimiserMatrix = newR;
     matrixFree(denomConstant);
