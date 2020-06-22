@@ -51,7 +51,7 @@ static data_t *readBlock(FILE *file) {
     // seek(file, &cRows);
     // seek(file, &cCols);
 
-    char *name = seek(file);
+    seek(file);
     char *cRows = seek(file);
     char *cCols = seek(file);
     int rows = atoi(cRows);
