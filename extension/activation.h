@@ -28,5 +28,6 @@ double sigmoidPrime(double x);
 double tanhActive(double x);
 double tanhPrime(double x);
 matrix2d_t *softmax(matrix2d_t *matrix);
+matrix2d_t *softmaxPrime(matrix2d_t *matrix);    
 
 #endif
