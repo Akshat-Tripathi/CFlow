@@ -89,6 +89,29 @@ void testActiveFuncs() {
     assertOther(tanhPrime(-123) < 0.00001);
     assertOther(tanhPrime(123) < 0.00001);
 
+    // double mat1[5][1] = {{1.3}, {5.1}, {2.2}, {0.7}, {1.1}};
+    // double ans[5][1] = {{0.02}, {0.9}, {0.05}, {0.01}, {0.02}};
+    matrix2d_t *mat1 = matrixCreate(5, 1);
+    matrix2d_t *ans1 = matrixCreate(5, 1);
+
+    matrixSet(mat1, 0, 0, 1.3);
+    matrixSet(mat1, 1, 0, 5.1);
+    matrixSet(mat1, 2, 0, 2.2);
+    matrixSet(mat1, 3, 0, 0.7);
+    matrixSet(mat1, 4, 0, 1.1);
+
+    matrixSet(ans1, 0, 0, 0.02);
+    matrixSet(ans1, 1, 0, 0.90);
+    matrixSet(ans1, 2, 0, 0.05);
+    matrixSet(ans1, 3, 0, 0.01);
+    matrixSet(ans1, 4, 0, 0.02);
+
+    matrix2d_t *result1 = softmax(mat1);
+    for (int i = 0; i < mat1->nRows; i++) {
+        for (int j = 0; j < mat1->nCols; j++) {
+            assertOther((matrixGet(result1, i, j) - matrixGet(ans1, i, j)) < CROSS_ENTROPY_COMPARISON);
+        }
+    }
     printf("Finished testing activation functions\n");
 }
 
@@ -158,7 +181,7 @@ void testMatrixActiveFuncs() {
 
     matrixRandomise(m1);
 
-    matrix2d_t *m2 = matrixActiveFunc(m1, RELU);
+    matrix2d_t *m2 = matrixActiveFunc(m1, (enum activationFunction) RELU);
     matrix2d_t *m3 = matrixActiveFunc(m1, RELU_PRIME);
     matrix2d_t *m4 = matrixActiveFunc(m1, LRELU);
     matrix2d_t *m5 = matrixActiveFunc(m1, LRELU_PRIME);
@@ -818,7 +841,7 @@ void testReadCSV() {
 
 int main() {
     printf("Starting tests\n\n");
-    // runTest(testActiveFuncs);
+    runTest(testActiveFuncs);
     // runTest(testMatrix);
     // runTest(testMatrixDotProduct);
     // runTest(testMatrixActiveFuncs);
@@ -831,7 +854,7 @@ int main() {
     // runTest(testDataFile);
     // runTest(testGraph);
     // runTest(testScheduler);
-    runTest(testErrorFunctions);
+    // runTest(testErrorFunctions);
     // runTest(testOptimisers);
     // runTest(testReadCSV);
     printf("%d out of %d tests pass!\n", testsRan - testsFailed, testsRan);
