@@ -210,7 +210,7 @@ void trainXOR(void) {
 
 int main(void) {
 
-    graph_t *graphOne = genGraphOne();
+    /*graph_t *graphOne = genGraphOne();
     graphFileWrite("DAG_1_SAVE", graphOne);
     graph_t *graphOneRead = graphFileRead("DAG_1_SAVE");
     writeGraph(graphOneRead);
@@ -239,7 +239,7 @@ int main(void) {
 
     lstm = LSTM(inputs, 2, SIGMOID, 5);
     writeGraph(compile(lstm, "lstmDiff"));
-    free(inputs);
+    free(inputs);*/
 
     trainXOR();
 

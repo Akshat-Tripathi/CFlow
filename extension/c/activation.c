@@ -49,7 +49,7 @@ double sigmoid(double x) {
 }
 
 double sigmoidPrime(double x) {
-    return sigmoid(x) * (1 - sigmoid(x));
+    return x * (1 - x);
     //Return statements are equivalent, but second return statement exceeds double size limit
     //return exp(x) / ((exp(x) + 1) * (exp(x) + 1));
 }
